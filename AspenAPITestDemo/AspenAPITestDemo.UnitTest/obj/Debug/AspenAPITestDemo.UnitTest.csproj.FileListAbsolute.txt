@@ -1,0 +1,11 @@
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\Config\rtdbConnection.xml
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\AspenAPITestDemo.UnitTest.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\AspenAPITestDemo.UnitTest.pdb
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\obj\Debug\AspenAPITestDemo.UnitTest.csprojResolveAssemblyReference.cache
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\obj\Debug\AspenAPITestDemo.UnitTest.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\obj\Debug\AspenAPITestDemo.UnitTest.pdb
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\Config\IptoPointConnection.xml
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\IptoPointConnection.xml
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\rtdbConnection.xml
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\RTDBInterface.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\RTDBInterface.pdb

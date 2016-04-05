@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTDBInterface", "RTDBInterface\RTDBInterface.csproj", "{C6E7699A-BE3B-4907-B51B-A85B1533577E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspenAPITestDemo.UnitTest", "AspenAPITestDemo.UnitTest\AspenAPITestDemo.UnitTest.csproj", "{4DE9298F-300A-42B1-AE70-77E3013B72AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6E7699A-BE3B-4907-B51B-A85B1533577E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E7699A-BE3B-4907-B51B-A85B1533577E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E7699A-BE3B-4907-B51B-A85B1533577E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E7699A-BE3B-4907-B51B-A85B1533577E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE9298F-300A-42B1-AE70-77E3013B72AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE9298F-300A-42B1-AE70-77E3013B72AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE9298F-300A-42B1-AE70-77E3013B72AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE9298F-300A-42B1-AE70-77E3013B72AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
