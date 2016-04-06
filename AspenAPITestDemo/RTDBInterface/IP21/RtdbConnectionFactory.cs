@@ -63,7 +63,7 @@ namespace RTDB.IP21
             if (connStringIPMap.Count == 0)
             {
                 connStringIPMap.Add("Dsn=pen163".ToUpper(), "10.5.24.163");
-                connStringIPMap.Add("Dsn=pen41".ToUpper(), "10.5.5.43");
+                connStringIPMap.Add("Dsn=pen43".ToUpper(), "10.5.5.43");
                 connStringIPMap.Add("Dsn=diesel".ToUpper(), "10.5.24.164");
                 connStringIPMap.Add("Dsn=pen165".ToUpper(), "10.5.24.165");
                 connStringIPMap.Add("Dsn=pen164".ToUpper(), "10.5.24.164");

@@ -9,3 +9,9 @@ E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.U
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\rtdbConnection.xml
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\RTDBInterface.dll
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\RTDBInterface.pdb
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\cimsrvapi.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\CimWin32Util.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\infoplus21_api.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\ip21admin_client.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\ip21ezrpcw32.dll
+E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\AspenAPITestDemo.UnitTest\bin\Debug\ip21winrpc32.dll

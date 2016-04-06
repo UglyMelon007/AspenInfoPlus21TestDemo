@@ -71,13 +71,13 @@
     <Compile Include="IP21\DBTimeReader.cs" />
     <Compile Include="IP21\DoubleField.cs" />
     <Compile Include="IP21\Field.cs" />
-    <Compile Include="IP21\infoplus21_api.cs" />
     <Compile Include="IP21\RtdbConnectionFactory.cs" />
     <Compile Include="IP21\TimeAggreationPair.cs" />
     <Compile Include="IP21\TimeField.cs" />
     <Compile Include="IP21\TimeValuePair.cs" />
     <Compile Include="IP21\Util.cs" />
     <Compile Include="IP21\HistoryReader.cs" />
+    <Compile Include="IP21\infoplus21_api.cs" />
     <Compile Include="IP21\IP21Exception.cs" />
     <Compile Include="IP21\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +111,24 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="cimsrvapi.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CimWin32Util.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="infoplus21_api.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ip21admin_client.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ip21ezrpcw32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ip21winrpc32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="IptoPointConnection.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
