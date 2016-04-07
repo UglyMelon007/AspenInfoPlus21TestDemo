@@ -1,8 +1,9 @@
 数据类型对照：
 character array       | char[]
 short word            | ushort
-long word             | uint
+long word             | ulong
 ERRBLOCK              | ERRBLOCK
+IDANDFT               | IDANDFT
 Double precision real | double
 Pointer to data       | string
 byte                  | byte
