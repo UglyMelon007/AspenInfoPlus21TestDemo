@@ -11,7 +11,7 @@ namespace RTDB.IP21
         {
         }
 
-        public override short DataType
+        public override ushort DataType
         {
             get { return infoplus21_api.DTYPXTIM; }
         }

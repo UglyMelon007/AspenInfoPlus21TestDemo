@@ -40,7 +40,8 @@ namespace RTDB.IP21
             string result = "10.5.5.43";//默认ip地址
             try
             {
-                string connectionString = HttpContext.Current.Session["RTDBconnectionString"].ToString();
+                HttpContext ht = HttpContext.Current;
+                string connectionString = ht == null ? Connection.currentServerIp : ht.Session["RTDBconnectionString"].ToString();
                 if (connectionString != null)
                 {
                     result = connectionString;

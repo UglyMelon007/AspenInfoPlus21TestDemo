@@ -46,7 +46,7 @@ namespace RTDB.IP21
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
 
-            int ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            uint ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -68,7 +68,7 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            int numPeriods;
+            uint numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(1, // int timeweight
@@ -129,7 +129,7 @@ namespace RTDB.IP21
             if (timeNew > dbCurrentTime)
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
-            int ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            uint ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -151,7 +151,7 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            int numPeriods;
+            uint numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(infoplus21_api.timeweight, // int timeweight
@@ -220,7 +220,7 @@ namespace RTDB.IP21
             if (timeNew > dbCurrentTime)
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
-            int ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            uint ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -240,7 +240,7 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            int numPeriods;
+            uint numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(infoplus21_api.timeweight, // int timeweight

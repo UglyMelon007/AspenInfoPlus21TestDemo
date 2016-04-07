@@ -38,18 +38,18 @@ namespace RTDB.IP21
             //设定开始和结束时间
             infoplus21_api.XUSTS endTime = Util.Time2XUSTS(timeNew);
             infoplus21_api.XUSTS startTime = Util.Time2XUSTS(timeOld);
-            int maxOccus = Convert.ToInt32((timeNew - timeOld).TotalSeconds / interval);
+            uint maxOccus = Convert.ToUInt32((timeNew - timeOld).TotalSeconds / interval);
             Field trendTime = Field.CreateField("IP_TREND_TIME");
             Field trendValue = Field.CreateField("IP_TREND_VALUE");
 
-            int[] fts = new int[] { trendTime.Id, trendValue.Id };
-            short[] dataTypes = new short[] { trendTime.DataType, trendValue.DataType };
-            int proDocc = fts[1] + 1;
+            uint[] fts = new uint[] { trendTime.Id, trendValue.Id };
+            ushort[] dataTypes = new ushort[] { trendTime.DataType, trendValue.DataType };
+            uint proDocc = fts[1] + 1;
 
             //设定返回值
             infoplus21_api.ERRBLOCK errMsg;
-            int occsok;
-            int ftsok;
+            uint occsok;
+            ushort ftsok;
             IntPtr[] point = new IntPtr[] { trendTime.AllocBuffer(maxOccus), trendValue.AllocBuffer(maxOccus) };
 
             infoplus21_api.RHIS21DATA(infoplus21_api.H21_GET_TIMES, // int mode
@@ -59,7 +59,7 @@ namespace RTDB.IP21
                 proDocc, // int propertyId
                 ref startTime, // ref XUSTS startTime
                 ref endTime, // ref XUSTS endTime
-                fts.Length, // int numfts
+                (ushort)fts.Length, // int numfts
                 fts, // int[] fts, 
                 dataTypes, // int[] datatypes
                 maxOccus, // int maxoccus
@@ -94,22 +94,23 @@ namespace RTDB.IP21
         /// <param name="timeNew">结束时间</param>
         /// <param name="interval">步长，单位秒</param>
         /// <returns></returns>
-        public static IList<TimeValuePair> ListHistoryDataByInterval(string tag, DateTime timeOld, DateTime timeNew, int interval) {
+        public static IList<TimeValuePair> ListHistoryDataByInterval(string tag, DateTime timeOld, DateTime timeNew, int interval)
+        {
             //设定开始和结束时间
             infoplus21_api.XUSTS endTime = Util.Time2XUSTS(timeNew);
             infoplus21_api.XUSTS startTime = Util.Time2XUSTS(timeOld);
-            int maxOccus = Convert.ToInt32((timeNew - timeOld).TotalSeconds/interval);
+            uint maxOccus = Convert.ToUInt32((timeNew - timeOld).TotalSeconds / interval);
             Field trendTime = Field.CreateField("IP_TREND_TIME");
             Field trendValue = Field.CreateField("IP_TREND_VALUE");
 
-            int[] fts = new int[] { trendTime.Id, trendValue.Id };
-            short[] dataTypes = new short[] { trendTime.DataType, trendValue.DataType };
-            int proDocc = fts[1] + 1;
+            uint[] fts = new uint[] { trendTime.Id, trendValue.Id };
+            ushort[] dataTypes = new ushort[] { trendTime.DataType, trendValue.DataType };
+            uint proDocc = fts[1] + 1;
 
             //设定返回值
             infoplus21_api.ERRBLOCK errMsg;
-            int occsok;
-            int ftsok;
+            uint occsok;
+            ushort ftsok;
             IntPtr[] point = new IntPtr[] { trendTime.AllocBuffer(maxOccus), trendValue.AllocBuffer(maxOccus) };
 
             infoplus21_api.RHIS21DATA(infoplus21_api.H21_GET_TIMES, // int mode
@@ -119,7 +120,7 @@ namespace RTDB.IP21
                 proDocc, // int propertyId
                 ref startTime, // ref XUSTS startTime
                 ref endTime, // ref XUSTS endTime
-                fts.Length, // int numfts
+                (ushort)fts.Length, // int numfts
                 fts, // int[] fts, 
                 dataTypes, // int[] datatypes
                 maxOccus, // int maxoccus
@@ -137,13 +138,14 @@ namespace RTDB.IP21
             Util.CheckResult(errMsg);
 
             IList<TimeValuePair> results = new List<TimeValuePair>();
-            for (int i = 0; i < occsok; i++) {
+            for (int i = 0; i < occsok; i++)
+            {
                 DateTime occurTime = Util.XTSBLOCK2Time((infoplus21_api.XTSBLOCK)trendTime.DataAt(i));
                 results.Add(new TimeValuePair(occurTime, (double)trendValue.DataAt(i)));
             }
 
             return results;
-        } 
+        }
 
 
         /// <summary>
@@ -155,7 +157,7 @@ namespace RTDB.IP21
         /// <param name="span">持续时间，单位为秒</param>
         /// <param name="properties">要读取的属性</param>
         /// <param name="maxOccus">要读取的最大发生次数</param>
-        public static IList<TimeValuePair> ListHistoryData(int mode, string tag, DateTime time, int span, int maxOccus)
+        public static IList<TimeValuePair> ListHistoryData(int mode, string tag, DateTime time, int span, uint maxOccus)
         {
             //设定开始和结束时间
             infoplus21_api.XUSTS endTime = Util.Time2XUSTS(time);
@@ -164,14 +166,14 @@ namespace RTDB.IP21
             Field trendTime = Field.CreateField("IP_TREND_TIME");
             Field trendValue = Field.CreateField("IP_TREND_VALUE");
 
-            int[] fts = new int[] { trendTime.Id, trendValue.Id };
-            short[] dataTypes = new short[] { trendTime.DataType, trendValue.DataType };
-            int proDocc = fts[1] + 1;
+            uint[] fts = new uint[] { trendTime.Id, trendValue.Id };
+            ushort[] dataTypes = new ushort[] { trendTime.DataType, trendValue.DataType };
+            uint proDocc = fts[1] + 1;
 
             //设定返回值
             infoplus21_api.ERRBLOCK errMsg;
-            int occsok;
-            int ftsok;
+            uint occsok;
+            ushort ftsok;
             IntPtr[] point = new IntPtr[] { trendTime.AllocBuffer(maxOccus), trendValue.AllocBuffer(maxOccus) };
 
             infoplus21_api.RHIS21DATA(mode, // int mode
@@ -181,7 +183,7 @@ namespace RTDB.IP21
                 proDocc, // int propertyId
                 ref startTime, // ref XUSTS startTime
                 ref endTime, // ref XUSTS endTime
-                fts.Length, // int numfts
+                (ushort)fts.Length, // int numfts
                 fts, // int[] fts, 
                 dataTypes, // int[] datatypes
                 maxOccus, // int maxoccus
@@ -219,7 +221,7 @@ namespace RTDB.IP21
         public static IList<TimeValuePair> ListAllHistory(int mode, string tag, DateTime time, int span)
         {
             //设定点数,初始设为100，逐级递增
-            int maxOccus = 100;
+            uint maxOccus = 100;
 
             while (true)
             {

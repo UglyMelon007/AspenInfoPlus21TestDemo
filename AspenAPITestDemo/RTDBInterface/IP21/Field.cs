@@ -9,7 +9,7 @@ namespace RTDB.IP21
     {
         protected object buffer;
         private GCHandle bufferHandle;
-        protected int bufferSize;
+        protected uint bufferSize;
 
         private string name;
         public Field(string name)
@@ -22,17 +22,17 @@ namespace RTDB.IP21
             get { return this.name; }
         }
 
-        public int Id
+        public uint Id
         {
             get { return Util.FieldId(this.name); }
         }
 
-        public abstract short DataType
+        public abstract ushort DataType
         {
             get;
         }
 
-        public IntPtr AllocBuffer(int size)
+        public IntPtr AllocBuffer(uint size)
         {
             this.bufferSize = size;
             this.buffer = AllocMyBuffer();
