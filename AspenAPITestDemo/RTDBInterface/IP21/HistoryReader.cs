@@ -38,17 +38,17 @@ namespace RTDB.IP21
             //设定开始和结束时间
             infoplus21_api.XUSTS endTime = Util.Time2XUSTS(timeNew);
             infoplus21_api.XUSTS startTime = Util.Time2XUSTS(timeOld);
-            uint maxOccus = Convert.ToUInt32((timeNew - timeOld).TotalSeconds / interval);
+            ulong maxOccus = Convert.ToUInt32((timeNew - timeOld).TotalSeconds / interval);
             Field trendTime = Field.CreateField("IP_TREND_TIME");
             Field trendValue = Field.CreateField("IP_TREND_VALUE");
 
-            uint[] fts = new uint[] { trendTime.Id, trendValue.Id };
+            ulong[] fts = new ulong[] { trendTime.Id, trendValue.Id };
             ushort[] dataTypes = new ushort[] { trendTime.DataType, trendValue.DataType };
-            uint proDocc = fts[1] + 1;
+            ulong proDocc = fts[1] + 1;
 
             //设定返回值
             infoplus21_api.ERRBLOCK errMsg;
-            uint occsok;
+            ulong occsok;
             ushort ftsok;
             IntPtr[] point = new IntPtr[] { trendTime.AllocBuffer(maxOccus), trendValue.AllocBuffer(maxOccus) };
 
@@ -77,7 +77,7 @@ namespace RTDB.IP21
             Util.CheckResult(errMsg);
 
             IList<TimeValuePair> results = new List<TimeValuePair>();
-            for (int i = 0; i < occsok; i++)
+            for (int i = 0; i < (int)occsok; i++)
             {
                 DateTime occurTime = Util.XTSBLOCK2Time((infoplus21_api.XTSBLOCK)trendTime.DataAt(i));
                 results.Add(new TimeValuePair(occurTime, (double)trendValue.DataAt(i)));
@@ -99,17 +99,17 @@ namespace RTDB.IP21
             //设定开始和结束时间
             infoplus21_api.XUSTS endTime = Util.Time2XUSTS(timeNew);
             infoplus21_api.XUSTS startTime = Util.Time2XUSTS(timeOld);
-            uint maxOccus = Convert.ToUInt32((timeNew - timeOld).TotalSeconds / interval);
+            ulong maxOccus = Convert.ToUInt32((timeNew - timeOld).TotalSeconds / interval);
             Field trendTime = Field.CreateField("IP_TREND_TIME");
             Field trendValue = Field.CreateField("IP_TREND_VALUE");
 
-            uint[] fts = new uint[] { trendTime.Id, trendValue.Id };
+            ulong[] fts = new ulong[] { trendTime.Id, trendValue.Id };
             ushort[] dataTypes = new ushort[] { trendTime.DataType, trendValue.DataType };
-            uint proDocc = fts[1] + 1;
+            ulong proDocc = fts[1] + 1;
 
             //设定返回值
             infoplus21_api.ERRBLOCK errMsg;
-            uint occsok;
+            ulong occsok;
             ushort ftsok;
             IntPtr[] point = new IntPtr[] { trendTime.AllocBuffer(maxOccus), trendValue.AllocBuffer(maxOccus) };
 
@@ -138,7 +138,7 @@ namespace RTDB.IP21
             Util.CheckResult(errMsg);
 
             IList<TimeValuePair> results = new List<TimeValuePair>();
-            for (int i = 0; i < occsok; i++)
+            for (int i = 0; i < (int)occsok; i++)
             {
                 DateTime occurTime = Util.XTSBLOCK2Time((infoplus21_api.XTSBLOCK)trendTime.DataAt(i));
                 results.Add(new TimeValuePair(occurTime, (double)trendValue.DataAt(i)));
@@ -157,7 +157,7 @@ namespace RTDB.IP21
         /// <param name="span">持续时间，单位为秒</param>
         /// <param name="properties">要读取的属性</param>
         /// <param name="maxOccus">要读取的最大发生次数</param>
-        public static IList<TimeValuePair> ListHistoryData(int mode, string tag, DateTime time, int span, uint maxOccus)
+        public static IList<TimeValuePair> ListHistoryData(int mode, string tag, DateTime time, int span, ulong maxOccus)
         {
             //设定开始和结束时间
             infoplus21_api.XUSTS endTime = Util.Time2XUSTS(time);
@@ -166,13 +166,13 @@ namespace RTDB.IP21
             Field trendTime = Field.CreateField("IP_TREND_TIME");
             Field trendValue = Field.CreateField("IP_TREND_VALUE");
 
-            uint[] fts = new uint[] { trendTime.Id, trendValue.Id };
+            ulong[] fts = new ulong[] { trendTime.Id, trendValue.Id };
             ushort[] dataTypes = new ushort[] { trendTime.DataType, trendValue.DataType };
-            uint proDocc = fts[1] + 1;
+            ulong proDocc = fts[1] + 1;
 
             //设定返回值
             infoplus21_api.ERRBLOCK errMsg;
-            uint occsok;
+            ulong occsok;
             ushort ftsok;
             IntPtr[] point = new IntPtr[] { trendTime.AllocBuffer(maxOccus), trendValue.AllocBuffer(maxOccus) };
 
@@ -201,7 +201,7 @@ namespace RTDB.IP21
             Util.CheckResult(errMsg);
 
             IList<TimeValuePair> results = new List<TimeValuePair>();
-            for (int i = 0; i < occsok; i++)
+            for (int i = 0; i < (int)occsok; i++)
             {
                 DateTime occurTime = Util.XTSBLOCK2Time((infoplus21_api.XTSBLOCK)trendTime.DataAt(i));
                 results.Add(new TimeValuePair(occurTime, (double)trendValue.DataAt(i)));
@@ -221,7 +221,7 @@ namespace RTDB.IP21
         public static IList<TimeValuePair> ListAllHistory(int mode, string tag, DateTime time, int span)
         {
             //设定点数,初始设为100，逐级递增
-            uint maxOccus = 100;
+            ulong maxOccus = 100;
 
             while (true)
             {
@@ -230,7 +230,7 @@ namespace RTDB.IP21
                 {
                     return results;
                 }
-                else if (results.Count < maxOccus) // no more data
+                else if ((ulong)results.Count < maxOccus) // no more data
                 {
                     return results; // all have been fetched
                 }

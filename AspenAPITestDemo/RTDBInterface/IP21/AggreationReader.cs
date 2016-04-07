@@ -6,7 +6,8 @@ using System.Collections;
 
 namespace RTDB.IP21
 {
-    internal class AggreationReader {
+    internal class AggreationReader
+    {
         //实时数据库刷新间隔，分钟
         private const int RTDB_REFRESH_STEP = 15;
 
@@ -17,13 +18,15 @@ namespace RTDB.IP21
             return GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_AVG);
         }
 
-        static public double GetDailyMax(string tag, DateTime date) {
+        static public double GetDailyMax(string tag, DateTime date)
+        {
             DateTime timeOld = new DateTime(date.Year, date.Month, date.Day); // start of the day
             DateTime timeNew = new DateTime(date.Year, date.Month, date.Day, 23, 59, 59); // end of the day
             return GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_MAX);
         }
 
-        static public double GetDailyMin(string tag, DateTime date) {
+        static public double GetDailyMin(string tag, DateTime date)
+        {
             DateTime timeOld = new DateTime(date.Year, date.Month, date.Day); // start of the day
             DateTime timeNew = new DateTime(date.Year, date.Month, date.Day, 23, 59, 59); // end of the day
             return GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_MIN);
@@ -38,7 +41,8 @@ namespace RTDB.IP21
         /// <param name="interval">统计值步长</param>
         /// <param name="doubleCodes">可以一次包含</param>
         /// <returns></returns>
-        static public IList<TimeAggreationPair> GetMaxMinAvgAtOnce(string tag, DateTime timeOld, DateTime timeNew, int interval) {
+        static public IList<TimeAggreationPair> GetMaxMinAvgAtOnce(string tag, DateTime timeOld, DateTime timeNew, int interval)
+        {
             //对于大于当前时间的统计值得求取会导致返回结果为零，因此，需要保证最大时间小于服务器当前时间。
             //实时数据库在最后一次保存到历史前，如果求统计值就会得零。
             DateTime dbCurrentTime = DBTimeReader.GetRTDBCurrentTime();
@@ -46,7 +50,7 @@ namespace RTDB.IP21
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
 
-            uint ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            ulong ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -68,7 +72,7 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            uint numPeriods;
+            ulong numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(1, // int timeweight
@@ -80,10 +84,10 @@ namespace RTDB.IP21
                 ref timeInterval, // ref XUSTS ptInterval, 
                 0, // int timealign, 
                 0, // int dsadjust, 
-                maxPeriods, // int maxperiods, 
-                times.Codes.Length, // int numtimecodes, 
-                doubles.Codes.Length, // int numdoublecodes, 
-                shorts.Codes.Length, // int numshortcodes, 
+                (ulong)maxPeriods, // int maxperiods, 
+                (ulong)times.Codes.Length, // int numtimecodes, 
+                (ulong)doubles.Codes.Length, // int numdoublecodes, 
+                (ulong)shorts.Codes.Length, // int numshortcodes, 
                 times.Codes, // short[] timecodes, 
                 doubles.Codes, // short[] doublecodes, 
                 shorts.Codes, // short[] shortcodes,
@@ -102,16 +106,17 @@ namespace RTDB.IP21
 
             IList<TimeAggreationPair> results = new List<TimeAggreationPair>();
             DateTime occurTime = timeOld;
-            for (int i = 0; i < numPeriods; i++) {
+            for (int i = 0; i < (int)numPeriods; i++)
+            {
                 occurTime = occurTime.AddSeconds(interval);
-                double min = (double) doubles.DataAt(i, infoplus21_api.AG_DBL_MIN);
+                double min = (double)doubles.DataAt(i, infoplus21_api.AG_DBL_MIN);
                 double max = (double)doubles.DataAt(i, infoplus21_api.AG_DBL_MAX);
                 double avg = (double)doubles.DataAt(i, infoplus21_api.AG_DBL_AVG);
-                double sum = (double) doubles.DataAt(i, infoplus21_api.AG_DBL_SUM);
+                double sum = (double)doubles.DataAt(i, infoplus21_api.AG_DBL_SUM);
                 results.Add(new TimeAggreationPair(occurTime, new AggreationData(min, avg, max, sum)));
             }
             return results;
-        } 
+        }
 
         /// <summary>
         /// 
@@ -122,14 +127,15 @@ namespace RTDB.IP21
         /// <param name="interval">间隔秒</param>
         /// <param name="doubleCode"></param>
         /// <returns></returns>
-        static public IList<TimeValuePair> GetAggreagedData(string tag, DateTime timeOld, DateTime timeNew, int interval, short doubleCode) {
+        static public IList<TimeValuePair> GetAggreagedData(string tag, DateTime timeOld, DateTime timeNew, int interval, short doubleCode)
+        {
             //对于大于当前时间的统计值得求取会导致返回结果为零，因此，需要保证最大时间小于服务器当前时间。
             //实时数据库在最后一次保存到历史前，如果求统计值就会得零。
             DateTime dbCurrentTime = DBTimeReader.GetRTDBCurrentTime();
             if (timeNew > dbCurrentTime)
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
-            uint ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            ulong ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -151,7 +157,7 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            uint numPeriods;
+            ulong numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(infoplus21_api.timeweight, // int timeweight
@@ -163,10 +169,10 @@ namespace RTDB.IP21
                 ref timeInterval, // ref XUSTS ptInterval, 
                 0, // int timealign, 
                 0, // int dsadjust, 
-                maxPeriods, // int maxperiods, 
-                times.Codes.Length, // int numtimecodes, 
-                doubles.Codes.Length, // int numdoublecodes, 
-                shorts.Codes.Length, // int numshortcodes, 
+                (ulong)maxPeriods, // int maxperiods, 
+                (ulong)times.Codes.Length, // int numtimecodes, 
+               (ulong)doubles.Codes.Length, // int numdoublecodes, 
+                (ulong)shorts.Codes.Length, // int numshortcodes, 
                 times.Codes, // short[] timecodes, 
                 doubles.Codes, // short[] doublecodes, 
                 shorts.Codes, // short[] shortcodes,
@@ -205,7 +211,8 @@ namespace RTDB.IP21
             //doubles.DataAt(0, doubleCode);
             IList<TimeValuePair> results = new List<TimeValuePair>();
             DateTime occurTime = timeOld;
-            for (int i = 0; i < numPeriods; i++) {
+            for (int i = 0; i < (int)numPeriods; i++)
+            {
                 occurTime = occurTime.AddSeconds(interval);
                 results.Add(new TimeValuePair(occurTime, (double)doubles.DataAt(i, doubleCode)));
             }
@@ -213,14 +220,15 @@ namespace RTDB.IP21
 
         }
 
-        static public double GetAggreagedData(string tag, DateTime timeOld, DateTime timeNew, short doubleCode) {
+        static public double GetAggreagedData(string tag, DateTime timeOld, DateTime timeNew, short doubleCode)
+        {
             //对于大于当前时间的统计值得求取会导致返回结果为零，因此，需要保证最大时间小于服务器当前时间。
             //实时数据库在最后一次保存到历史前，如果求统计值就会得零。
             DateTime dbCurrentTime = DBTimeReader.GetRTDBCurrentTime();
             if (timeNew > dbCurrentTime)
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
-            uint ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            ulong ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -240,7 +248,7 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            uint numPeriods;
+            ulong numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(infoplus21_api.timeweight, // int timeweight
@@ -252,10 +260,10 @@ namespace RTDB.IP21
                 ref timeInterval, // ref XUSTS ptInterval, 
                 0, // int timealign, 
                 0, // int dsadjust, 
-                maxPeriods, // int maxperiods, 
-                times.Codes.Length, // int numtimecodes, 
-                doubles.Codes.Length, // int numdoublecodes, 
-                shorts.Codes.Length, // int numshortcodes, 
+                (ulong)maxPeriods, // int maxperiods, 
+                (ulong)times.Codes.Length, // int numtimecodes, 
+                (ulong)doubles.Codes.Length, // int numdoublecodes, 
+                (ulong)shorts.Codes.Length, // int numshortcodes, 
                 times.Codes, // short[] timecodes, 
                 doubles.Codes, // short[] doublecodes, 
                 shorts.Codes, // short[] shortcodes,
@@ -302,12 +310,15 @@ namespace RTDB.IP21
         /// <param name="timeNew"></param>
         /// <param name="doubleCode"></param>
         /// <returns></returns>
-        static public Dictionary<string, string> GetAggreagedData(IList tags, DateTime timeOld, DateTime timeNew, short doubleCode) {
+        static public Dictionary<string, string> GetAggreagedData(IList tags, DateTime timeOld, DateTime timeNew, short doubleCode)
+        {
             Dictionary<string, string> result = new Dictionary<string, string>();
-            foreach (string tag in tags) {
-                if (!result.ContainsKey(tag)) {
-                 double value = GetAggreagedData(tag, timeOld, timeNew, doubleCode);
-                result.Add(tag, value.ToString());
+            foreach (string tag in tags)
+            {
+                if (!result.ContainsKey(tag))
+                {
+                    double value = GetAggreagedData(tag, timeOld, timeNew, doubleCode);
+                    result.Add(tag, value.ToString());
                 }
             }
             return result;

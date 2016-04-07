@@ -8,6 +8,5 @@ E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\RTDBInterface\bin\
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\RTDBInterface\bin\Debug\rtdbConnection.xml
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\RTDBInterface\bin\Debug\RTDBInterface.dll
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\RTDBInterface\bin\Debug\RTDBInterface.pdb
-E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\RTDBInterface\obj\Debug\RTDBInterface.csprojResolveAssemblyReference.cache
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\RTDBInterface\obj\Debug\RTDBInterface.dll
 E:\chao_work_data\WorkTask\Unfinish\AspenAPI\AspenAPITestDemo\RTDBInterface\obj\Debug\RTDBInterface.pdb

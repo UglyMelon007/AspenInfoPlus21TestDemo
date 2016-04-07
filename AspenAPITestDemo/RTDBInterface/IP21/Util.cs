@@ -37,19 +37,19 @@ namespace RTDB.IP21
             return XUTS2Time(xuts);
         }
 
-        public static uint TagId(string tagName)
+        public static ulong TagId(string tagName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            uint recid;
+            ulong recid;
             char[] tagbyte = tagName.ToCharArray();
             infoplus21_api.DECODNAM(tagbyte, (ushort)tagName.Length, out recid, out errMsg);
             return recid;
         }
 
-        public static uint FieldId(string fieldName)
+        public static ulong FieldId(string fieldName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            uint fieldId;
+            ulong fieldId;
             byte[] propertybyte = Encoding.Default.GetBytes(fieldName.Trim());
             infoplus21_api.DECODFT(propertybyte, (short)fieldName.Length, out fieldId, out errMsg);
             return fieldId;

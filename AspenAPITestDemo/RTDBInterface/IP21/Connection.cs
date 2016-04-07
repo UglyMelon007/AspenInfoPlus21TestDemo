@@ -133,7 +133,7 @@ namespace RTDB.IP21
             this.serverIp = Util.getAspenIPfromPointReg(tag);
             SwitchToServerIp();
             infoplus21_api.ERRBLOCK errMsg;
-            long recid = Util.TagId(tag);
+            ulong recid = Util.TagId(tag);
 
             Single value = 0;
             infoplus21_api.DB2REAL(recid, Util.FieldId(property), out value, out errMsg);
@@ -271,8 +271,8 @@ namespace RTDB.IP21
 
         public double ASCIIDB2I(string tagName)
         {
-            uint recid;
-            uint indata;
+            ulong recid;
+            ulong indata;
             string fieldId = "IP_VALUE";
             char[] tagbyte = tagName.ToCharArray();
             infoplus21_api.ERRBLOCK errMsg;
@@ -288,7 +288,7 @@ namespace RTDB.IP21
 
         public void CHBF2DB(string data)
         {
-            uint recid = 11111111;
+            ulong recid = 11111111;
             char[] tagbyte = data.ToCharArray();
             infoplus21_api.ERRBLOCK errMsg;
             SwitchToServerIp();
@@ -315,12 +315,10 @@ namespace RTDB.IP21
         public void COPYREC(string tagName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            uint newId = 123456;
+            ulong newId = 123456;
             string newTagName = "helloapitest";
             char[] ptname = newTagName.ToCharArray();
             SwitchToServerIp();
-            infoplus21_api.CHKFREE(newId, out errMsg);
-            Util.CheckResult(errMsg);
             Util.TagId(newTagName);
             infoplus21_api.COPYREC(Util.TagId(tagName), newId, 0, ptname, (ushort)ptname.Length, out errMsg);
             Util.CheckResult(errMsg);
@@ -329,15 +327,15 @@ namespace RTDB.IP21
         public void CREATEREC(string recordName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            uint recordId = 123456;
-            uint definitionId = 123456;
+            ulong recordId = 123456;
+            ulong definitionId = 123456;
             char[] ptname = recordName.ToCharArray();
             SwitchToServerIp();
             infoplus21_api.CREATEREC(recordId, definitionId, ptname, (ushort)ptname.Length, out errMsg);
             Util.CheckResult(errMsg);
         }
 
-        public void D2ASCIIDB(uint recid, uint ft, double realData)
+        public void D2ASCIIDB(ulong recid, ulong ft, double realData)
         {
             infoplus21_api.ERRBLOCK errMsg;
             char[] ptbuff;

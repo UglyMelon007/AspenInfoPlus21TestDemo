@@ -98,8 +98,8 @@ namespace AspenAPITestDemo.UnitTest
         /// </summary>
         public void D2ASCIIDBUnitTest()
         {
-            uint recid = 1234;
-            uint ft = 1235;
+            ulong recid = 1234;
+            ulong ft = 1235;
             double realData = 123.123;
             _connection.D2ASCIIDB(recid, ft, realData);
         }
