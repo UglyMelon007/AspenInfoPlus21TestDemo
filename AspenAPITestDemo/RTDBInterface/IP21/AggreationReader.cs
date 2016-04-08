@@ -50,7 +50,7 @@ namespace RTDB.IP21
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
 
-            ulong ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            int ft = Util.GetFieldTag("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -72,22 +72,22 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            ulong numPeriods;
+            int numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(1, // int timeweight
                 infoplus21_api.step,
-                Util.TagId(tag), // int recid, 
+                Util.GetRecordId(tag), // int recid, 
                 ft, // int ft, 
                 ref ptTimeOld, // ref XUSTS ptTimeOld, 
                 ref ptTimeNew, //ref XUSTS ptTimeNew, 
                 ref timeInterval, // ref XUSTS ptInterval, 
                 0, // int timealign, 
                 0, // int dsadjust, 
-                (ulong)maxPeriods, // int maxperiods, 
-                (ulong)times.Codes.Length, // int numtimecodes, 
-                (ulong)doubles.Codes.Length, // int numdoublecodes, 
-                (ulong)shorts.Codes.Length, // int numshortcodes, 
+                (int)maxPeriods, // int maxperiods, 
+                (int)times.Codes.Length, // int numtimecodes, 
+                (int)doubles.Codes.Length, // int numdoublecodes, 
+                (int)shorts.Codes.Length, // int numshortcodes, 
                 times.Codes, // short[] timecodes, 
                 doubles.Codes, // short[] doublecodes, 
                 shorts.Codes, // short[] shortcodes,
@@ -135,7 +135,7 @@ namespace RTDB.IP21
             if (timeNew > dbCurrentTime)
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
-            ulong ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            int ft = Util.GetFieldTag("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -157,22 +157,22 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            ulong numPeriods;
+            int numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(infoplus21_api.timeweight, // int timeweight
                 infoplus21_api.step,
-                Util.TagId(tag), // int recid, 
+                Util.GetRecordId(tag), // int recid, 
                 ft, // int ft, 
                 ref ptTimeOld, // ref XUSTS ptTimeOld, 
                 ref ptTimeNew, //ref XUSTS ptTimeNew, 
                 ref timeInterval, // ref XUSTS ptInterval, 
                 0, // int timealign, 
                 0, // int dsadjust, 
-                (ulong)maxPeriods, // int maxperiods, 
-                (ulong)times.Codes.Length, // int numtimecodes, 
-               (ulong)doubles.Codes.Length, // int numdoublecodes, 
-                (ulong)shorts.Codes.Length, // int numshortcodes, 
+                (int)maxPeriods, // int maxperiods, 
+                (int)times.Codes.Length, // int numtimecodes, 
+               (int)doubles.Codes.Length, // int numdoublecodes, 
+                (int)shorts.Codes.Length, // int numshortcodes, 
                 times.Codes, // short[] timecodes, 
                 doubles.Codes, // short[] doublecodes, 
                 shorts.Codes, // short[] shortcodes,
@@ -228,7 +228,7 @@ namespace RTDB.IP21
             if (timeNew > dbCurrentTime)
                 timeNew = dbCurrentTime.AddMinutes(-1 * RTDB_REFRESH_STEP);
             //*********************************************************
-            ulong ft = Util.FieldId("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
+            int ft = Util.GetFieldTag("IP_TREND_VALUE") + 1; // !!! +1 is a must !!!
 
             infoplus21_api.XUSTS ptTimeOld = Util.Time2XUSTS(timeOld);
             infoplus21_api.XUSTS ptTimeNew = Util.Time2XUSTS(timeNew);
@@ -248,22 +248,22 @@ namespace RTDB.IP21
             AggregatedData shorts = AggregatedData.CreateData(AggregatedData.Type.SHORT);
             shorts.Codes = new short[] { infoplus21_api.AG_SHRT_QLEVEL };
 
-            ulong numPeriods;
+            int numPeriods;
             infoplus21_api.ERRBLOCK errMsg;
 
             infoplus21_api.RHIS21AGGREG(infoplus21_api.timeweight, // int timeweight
                 infoplus21_api.step,
-                Util.TagId(tag), // int recid, 
+                Util.GetRecordId(tag), // int recid, 
                 ft, // int ft, 
                 ref ptTimeOld, // ref XUSTS ptTimeOld, 
                 ref ptTimeNew, //ref XUSTS ptTimeNew, 
                 ref timeInterval, // ref XUSTS ptInterval, 
                 0, // int timealign, 
                 0, // int dsadjust, 
-                (ulong)maxPeriods, // int maxperiods, 
-                (ulong)times.Codes.Length, // int numtimecodes, 
-                (ulong)doubles.Codes.Length, // int numdoublecodes, 
-                (ulong)shorts.Codes.Length, // int numshortcodes, 
+                (int)maxPeriods, // int maxperiods, 
+                (int)times.Codes.Length, // int numtimecodes, 
+                (int)doubles.Codes.Length, // int numdoublecodes, 
+                (int)shorts.Codes.Length, // int numshortcodes, 
                 times.Codes, // short[] timecodes, 
                 doubles.Codes, // short[] doublecodes, 
                 shorts.Codes, // short[] shortcodes,

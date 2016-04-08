@@ -3,18 +3,20 @@
 AspenInfoPlus.21 API  
 ***
 数据类型对照：  
-character array       | char[]  
-short word            | ushort  
-long word             | ulong  
+character array       | byte[]  
+short word            | short  
+long word             | int  
 ERRBLOCK              | ERRBLOCK  
-IDANDFT               | IDANDFT  
+IDANDFT               | IDANDFT  (不准）
 Double precision real | double  
 Pointer to data       | string  
 byte                  | byte  
 Integer               | int  
 short word array      | short[]  
+single precision real | float
+Console               | 
 ***
 关键字:  
 Access Output only   
 Mechanism  Passed by reference  
-为out  
+为out

@@ -37,19 +37,22 @@ namespace RTDB.IP21
             return XUTS2Time(xuts);
         }
 
-        public static ulong TagId(string tagName)
+        public static int GetRecordId(string recordName)
         {
+            Connection.serverIp = getAspenIPfromPointReg(recordName);
+            Connection.SwitchToServerIp();
             infoplus21_api.ERRBLOCK errMsg;
-            ulong recid;
-            char[] tagbyte = tagName.ToCharArray();
-            infoplus21_api.DECODNAM(tagbyte, (ushort)tagName.Length, out recid, out errMsg);
+            int recid;
+            byte[] tagbyte = Encoding.Default.GetBytes(recordName.Trim());
+            infoplus21_api.DECODNAM(tagbyte, (short)recordName.Length, out recid, out errMsg);
+            CheckResult(errMsg);
             return recid;
         }
 
-        public static ulong FieldId(string fieldName)
+        public static int GetFieldTag(string fieldName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            ulong fieldId;
+            int fieldId;
             byte[] propertybyte = Encoding.Default.GetBytes(fieldName.Trim());
             infoplus21_api.DECODFT(propertybyte, (short)fieldName.Length, out fieldId, out errMsg);
             return fieldId;

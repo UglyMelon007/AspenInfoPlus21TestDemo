@@ -7,7 +7,7 @@ namespace RTDB.IP21
 {
     public class Connection
     {
-        private string serverIp;
+        public static string serverIp;
         private int serverIndex;
         public static string serverGroup = "200";
         private static Dictionary<string, int> serverPool = new Dictionary<string, int>();
@@ -19,9 +19,9 @@ namespace RTDB.IP21
             set { this.serverIndex = value; }
         }
 
-        private Connection(string serverIp)
+        public Connection(string serverIp)
         {
-            this.serverIp = serverIp;
+            Connection.serverIp = serverIp;
         }
 
         public static Connection OpenConnection(string serverIp)
@@ -52,7 +52,7 @@ namespace RTDB.IP21
                     throw new IP21Exception("failed to initialize da without reading config file");
                 }
 
-                string connectString = this.serverIp + " " + serverGroup + " " + "/FATAL";
+                string connectString = serverIp + " " + serverGroup + " " + "/FATAL";
                 Util.writestr(connectString);
                 byte[] bpara = Encoding.Default.GetBytes(connectString);
                 this.serverIndex = infoplus21_api.DaAddServer(bpara, out errMsg);
@@ -68,11 +68,12 @@ namespace RTDB.IP21
             currentServerIp = serverIp;
         }
 
-        private bool SwitchToServerIp()
+        public static bool SwitchToServerIp()
         {
             if (!currentServerIp.Equals(serverIp))
             {
-                Init();
+                Connection conn = new Connection(serverIp);
+                conn.Init();
             }
             return true;
         }
@@ -80,32 +81,24 @@ namespace RTDB.IP21
         // 从历史数据库取实际值
         public double GetActuals(string tag, DateTime time, int span)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return HistoryReader.ReadActuals(tag, time, span);
         }
 
         // 从历史数据库取插值
         public double GetInterpolated(string tag, DateTime time)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return HistoryReader.ReadInterpolated(tag, time);
         }
 
         // 从历史数据库取时间和实际值
         public IList<TimeValuePair> ListActuals(string tag, DateTime time, int span)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return HistoryReader.ListAllHistory(infoplus21_api.H21_GET_ACTUALS, tag, time, span);
         }
 
         // 从历史数据库取时间和实际值
         public IList<TimeValuePair> ListInterpolated(string tag, DateTime time, int span)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return HistoryReader.ListAllHistory(infoplus21_api.H21_GET_TIMES, tag, time, span);
         }
 
@@ -115,28 +108,24 @@ namespace RTDB.IP21
         // 从实时数据库取数
         public string GetStringValue(string tag, string property)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             infoplus21_api.ERRBLOCK errMsg;
 
-            char[] des = new char[200];
+            byte[] des = new byte[200];
 
-            infoplus21_api.DB2CHBF(Util.TagId(tag), Util.FieldId(property), out des, (ushort)des.Length, out errMsg);
+            infoplus21_api.DB2CHBF(Util.GetRecordId(tag), Util.GetFieldTag(property), out des, (short)des.Length, out errMsg);
             Util.CheckResult(errMsg);
 
             return des.ToString();
         }
 
         // 从实时数据库取数
-        public Single GetNumValue(string tag, string property)
+        public float GetNumValue(string tag, string property)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             infoplus21_api.ERRBLOCK errMsg;
-            ulong recid = Util.TagId(tag);
+            int recid = Util.GetRecordId(tag);
 
-            Single value = 0;
-            infoplus21_api.DB2REAL(recid, Util.FieldId(property), out value, out errMsg);
+            float value = 0;
+            infoplus21_api.DB2REAL(recid, Util.GetFieldTag(property), out value, out errMsg);
             Util.CheckResult(errMsg);
 
             return value;
@@ -145,8 +134,6 @@ namespace RTDB.IP21
         // 直接读取实时值
         public Single GetValue(string tag)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return GetNumValue(tag, "IP_VALUE");
         }
         /// <summary>
@@ -156,7 +143,6 @@ namespace RTDB.IP21
         /// <returns></returns>
         public Dictionary<string, string> GetCurrentData(IList tags)
         {
-            SwitchToServerIp();
             Dictionary<string, string> result = new Dictionary<string, string>();
             foreach (string tag in tags)
             {
@@ -171,176 +157,138 @@ namespace RTDB.IP21
 
         public double GetAveragedData(string tag, DateTime timeOld, DateTime timeNew)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
+            serverIp = Util.getAspenIPfromPointReg(tag);
             SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_AVG);
         }
         public double GetAveragedDataSTD(string tag, DateTime timeOld, DateTime timeNew)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_AVG);
         }
 
         public double GetAveragedDataFor(string tag, DateTime timeOld, DateTime timeNew)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_AVG);
         }
 
         public Dictionary<string, string> GetAveragedData(IList tags, DateTime timeOld, DateTime timeNew)
         {
-            SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tags, timeOld, timeNew, infoplus21_api.AG_DBL_AVG);
         }
         public Dictionary<string, string> GetAveragedSTD(IList tags, DateTime timeOld, DateTime timeNew)
         {
-            if (tags.Count > 0)
-            {
-                this.serverIp = Util.getAspenIPfromPointReg(tags[0].ToString());
-            }
-            SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tags, timeOld, timeNew, infoplus21_api.AG_DBL_STD);
         }
 
         public IList<TimeAggreationPair> GetMaxMinAvgAtOnce(string tag, DateTime timeOld, DateTime timeNew, int interval)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetMaxMinAvgAtOnce(tag, timeOld, timeNew, interval);
         }
 
         public IList<TimeValuePair> GetAveragedData(string tag, DateTime timeOld, DateTime timeNew, int interval)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tag, timeOld, timeNew, interval, infoplus21_api.AG_DBL_AVG);
         }
 
         public IList<TimeValuePair> GetCurrentData(string tag, DateTime timeOld, DateTime timeNew, int interval)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);//这里强行换掉原来的ip地址
-            //注意要在SwitchToServerIp之前换掉，SwitchToServerIp本身也是换ip的方式
-            SwitchToServerIp();
             return HistoryReader.ListHistoryDataByInterval(tag, timeOld, timeNew, interval);
         }
         public IList<TimeValuePair> GetCurrentData(string tag, DateTime timeOld, DateTime timeNew, string interval)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
-
             return HistoryReader.ListHistoryDataByInterval(tag, timeOld, timeNew, interval);
         }
 
         public double GetMaxData(string tag, DateTime timeOld, DateTime timeNew)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_MAX);
         }
 
         public double GetMinData(string tag, DateTime timeOld, DateTime timeNew)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetAggreagedData(tag, timeOld, timeNew, infoplus21_api.AG_DBL_MIN);
         }
 
         public double GetDailyAverage(string tag, DateTime date)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetDailyAverage(tag, date);
         }
 
         public double GetDailyMax(string tag, DateTime date)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetDailyMax(tag, date);
         }
 
         public double GetDailyMin(string tag, DateTime date)
         {
-            this.serverIp = Util.getAspenIPfromPointReg(tag);
-            SwitchToServerIp();
             return AggreationReader.GetDailyMin(tag, date);
         }
 
 
         public double ASCIIDB2I(string tagName)
         {
-            ulong recid;
-            ulong indata;
+            int recid;
+            int indata;
             string fieldId = "IP_VALUE";
-            char[] tagbyte = tagName.ToCharArray();
+            byte[] tagbyte = Encoding.Default.GetBytes(tagName.Trim());
             infoplus21_api.ERRBLOCK errMsg;
-            SwitchToServerIp();
-            infoplus21_api.DECODNAM(tagbyte, (ushort)tagName.Length, out recid, out errMsg);
+            infoplus21_api.DECODNAM(tagbyte, (short)tagName.Length, out recid, out errMsg);
             Util.CheckResult(errMsg);
-            SwitchToServerIp();
-            tagbyte = fieldId.ToCharArray();
-            infoplus21_api.ASCIIDB2I(recid, Util.FieldId(fieldId), tagbyte, (ushort)tagbyte.Length, out indata, out errMsg);
+            tagbyte = Encoding.Default.GetBytes(fieldId.Trim());
+            infoplus21_api.ASCIIDB2I(recid, Util.GetFieldTag(fieldId), tagbyte, (short)tagbyte.Length, out indata, out errMsg);
             Util.CheckResult(errMsg);
             return indata;
         }
 
         public void CHBF2DB(string data)
         {
-            ulong recid = 11111111;
-            char[] tagbyte = data.ToCharArray();
+            int recid = 11111111;
+            byte[] tagbyte = Encoding.Default.GetBytes(data.Trim());
             infoplus21_api.ERRBLOCK errMsg;
-            SwitchToServerIp();
-            infoplus21_api.CHBF2DB(recid, 3, tagbyte, (ushort)tagbyte.Length, out errMsg);
+            infoplus21_api.CHBF2DB(recid, 3, tagbyte, (short)tagbyte.Length, out errMsg);
             Util.CheckResult(errMsg);
         }
 
         public void CHKFREE(string tagName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            SwitchToServerIp();
-            infoplus21_api.CHKFREE(Util.TagId(tagName), out errMsg);
+            infoplus21_api.CHKFREE(Util.GetRecordId(tagName), out errMsg);
             Util.CheckResult(errMsg);
         }
 
         public void CHKFTREC(string tagName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            SwitchToServerIp();
-            infoplus21_api.CHKFTREC(Util.FieldId("Value"), Util.TagId(tagName), out errMsg);
+            infoplus21_api.CHKFTREC(Util.GetFieldTag("Value"), Util.GetRecordId(tagName), out errMsg);
             Util.CheckResult(errMsg);
         }
 
         public void COPYREC(string tagName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            ulong newId = 123456;
+            int newId = 123456;
             string newTagName = "helloapitest";
-            char[] ptname = newTagName.ToCharArray();
-            SwitchToServerIp();
-            Util.TagId(newTagName);
-            infoplus21_api.COPYREC(Util.TagId(tagName), newId, 0, ptname, (ushort)ptname.Length, out errMsg);
+            byte[] ptname = Encoding.Default.GetBytes(newTagName.Trim());
+            Util.GetRecordId(newTagName);
+            infoplus21_api.COPYREC(Util.GetRecordId(tagName), newId, 0, ptname, (short)ptname.Length, out errMsg);
             Util.CheckResult(errMsg);
         }
 
         public void CREATEREC(string recordName)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            ulong recordId = 123456;
-            ulong definitionId = 123456;
-            char[] ptname = recordName.ToCharArray();
-            SwitchToServerIp();
-            infoplus21_api.CREATEREC(recordId, definitionId, ptname, (ushort)ptname.Length, out errMsg);
+            int recordId = 123456;
+            int definitionId = 123456;
+            byte[] ptname = Encoding.Default.GetBytes(recordName.Trim());
+            infoplus21_api.CREATEREC(recordId, definitionId, ptname, (short)ptname.Length, out errMsg);
             Util.CheckResult(errMsg);
         }
 
-        public void D2ASCIIDB(ulong recid, ulong ft, double realData)
+        public void D2ASCIIDB(int recid, int ft, double realData)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            char[] ptbuff;
-            ushort numchars;
-            SwitchToServerIp();
+            byte[] ptbuff;
+            short numchars;
             infoplus21_api.D2ASCIIDB(recid, ft, ref realData, out ptbuff, 1000, out numchars, out errMsg);
             Util.CheckResult(errMsg);
         }
@@ -348,20 +296,93 @@ namespace RTDB.IP21
         public void DATA2ASCII(string ptdata)
         {
             infoplus21_api.ERRBLOCK errMsg;
-            char[] ptbuff;
-            ushort numchars;
-            SwitchToServerIp();
+            byte[] ptbuff;
+            short numchars;
             infoplus21_api.DATA2ASCII(ptdata, 1000, 2, 0, out ptbuff, 2000, out numchars, out errMsg);
             Util.CheckResult(errMsg);
         }
 
-        public void DB2DUBL(string recordName, string filedName)
+        public double DB2DUBL(string recordName, string filedName)
         {
             infoplus21_api.ERRBLOCK errMsg;
             double dubldata;
-            SwitchToServerIp();
-            infoplus21_api.DB2DUBL(Util.TagId(recordName), Util.FieldId(filedName), out dubldata, out errMsg);
+            infoplus21_api.DB2DUBL(Util.GetRecordId(recordName), Util.GetFieldTag(filedName), out dubldata, out errMsg);
             Util.CheckResult(errMsg);
+            return dubldata;
+        }
+
+        public void DB2IDFT(string recordName, string fieldName)
+        {
+            infoplus21_api.ERRBLOCK errMsg;
+            infoplus21_api.IDANDFT idandft;
+            int recid = Util.GetRecordId(recordName);
+            int ft = Util.GetFieldTag(fieldName);
+            infoplus21_api.DB2IDFT(recid, ft, out idandft, out errMsg);
+            Util.CheckResult(errMsg);
+        }
+
+        public void DB2LONG(string recordName, string fieldName)
+        {
+            infoplus21_api.ERRBLOCK errMsg;
+            int intdata;
+            int recid = Util.GetRecordId(recordName);
+            int ft = Util.GetFieldTag(fieldName);
+            infoplus21_api.DB2LONG(recid, ft, out intdata, out errMsg);
+        }
+
+        public void DB2REID(string recordName, string fieldName)
+        {
+
+        }
+
+        public void DECODRAF(string recordName, string fieldName)
+        {
+            infoplus21_api.ERRBLOCK errMsg;
+            //byte[][] ptbuff = new byte[2][];
+            //ptbuff[0] = Encoding.Default.GetBytes(recordName.Trim());
+            //ptbuff[1] = Encoding.Default.GetBytes(fieldName.Trim());
+            //byte[] ptbuff = Encoding.Default.GetBytes(recordName.Trim() + fieldName.Trim()); //Encoding.Default.GetBytes(fieldName.Trim());
+            infoplus21_api.NAMFTARR ptbuff = new infoplus21_api.NAMFTARR
+            {
+                RecordName = Encoding.Default.GetBytes(recordName.Trim()),
+                FieldName = Encoding.Default.GetBytes(fieldName.Trim())
+            };
+
+            int recid;
+            int ft;
+            infoplus21_api.DECODRAF(ref ptbuff, 1000, out recid, out ft, out errMsg);
+            Util.CheckResult(errMsg);
+        }
+
+        public void GETNMFDB(string recordName, string fieldName)
+        {
+
+            int recid = Util.GetRecordId(recordName);
+            int ft = Util.GetFieldTag(fieldName);
+            infoplus21_api.NAMFTARR obj;
+            short numchars;
+            infoplus21_api.GETNMFDB(recid, ft, out obj, out numchars);
+        }
+
+        public int DEFINID(string recordName)
+        {
+            int recid = Util.GetRecordId(recordName);
+            return infoplus21_api.DEFINID(recid);
+        }
+
+        public void DELETREC(string recordName)
+        {
+            infoplus21_api.ERRBLOCK errMsg;
+            int recid = Util.GetRecordId(recordName);
+            infoplus21_api.DELETREC(recid, out errMsg);
+            Util.CheckResult(errMsg);
+        }
+
+        public infoplus21_api.XTSBLOCK DSPDT2XTS(int day, int time)
+        {
+            infoplus21_api.XTSBLOCK xts;
+            infoplus21_api.DSPDT2XTS(day, time, out xts);
+            return xts;
         }
     }
 }
