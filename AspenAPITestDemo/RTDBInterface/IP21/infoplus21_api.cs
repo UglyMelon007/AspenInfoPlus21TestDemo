@@ -102,11 +102,11 @@ namespace RTDB.IP21
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern bool INISETC();
 
-        //在程序退出之前调用ENDSETC() 
-        //关闭所有服务节点连接 消毁服务列表函数并释放所有资源
-        //程序不应该调用它除非当程序退出时
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ENDSETC();
+        ////在程序退出之前调用ENDSETC() 
+        ////关闭所有服务节点连接 消毁服务列表函数并释放所有资源
+        ////程序不应该调用它除非当程序退出时
+        //[DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        //public static extern void ENDSETC();
 
         //工作方工类似DECODNAM()
         //只是它在接受一个记录或字段名后返回的是一个记录ID和一个字段标记
@@ -402,7 +402,7 @@ namespace RTDB.IP21
         /// <param name="occsdeleted">short word(short),引用传递（out），删除成功的个数</param>
         /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DELOCCS(int recid, int ft, int numoccs, int occnum,  out short occsdeleted, out ERRBLOCK error);
+        public static extern void DELOCCS(int recid, int ft, int numoccs, int occnum, out short occsdeleted, out ERRBLOCK error);
 
         /// <summary>
         /// 将一个“day of century"时间格式化为一个Aspen InfoPlus.21扩展时间戳
@@ -423,13 +423,31 @@ namespace RTDB.IP21
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern void DUBLADD2DB(int recid, int ft, double dubldata, out ERRBLOCK error);
 
-        //Console类型 先放着
+        /// <summary>
+        /// 终止一个活动GCS/InfoPlus.21控制台服务进程和正在调用应用程序之间的一个进程间通信接口
+        /// </summary>
+        /// <param name="descriptor">Console(Console),引用传递，为一个标识这个接口已经被初始化的结构的一个引用。这个结构必须调用INITCONS来初始化。输出时，这个结构不再形容一个有效的接口。Console类型被定义在文件名为console.h的头文件中</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         //[DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        //public static extern void ENDCONS( , out ERRBLOCK error);
+        //public static extern void ENDCONS(Console descriptor, out ERRBLOCK error);
 
 
+        /// <summary>
+        ////在程序退出之前调用ENDSETC() 
+        ////关闭所有服务节点连接 消毁服务列表函数并释放所有资源
+        ////程序不应该调用它除非当程序退出时
+        /// </summary>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DUBLADD2DB(int recid, int ft, double dubldata, out ERRBLOCK error);
+        public static extern void ENDSETC();
+
+        /// <summary>
+        /// 返回一个与数据库错误块相对应的ASCII错误信息
+        /// </summary>
+        /// <param name="error">ERRBLOCK(ERRBLOCK)，引用传递，包含一个要被转换成ASCII的错误编码的错误块</param>
+        /// <param name="error_msg">ERRARRAY(ERRARRAY)，引用传递(out),为被转换成ASCII错误信息的数组</param>
+        /// <param name="errsz">short word(short),引用传递（out），返回信息的字符个数，剩下的字符被用空填充</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ERRMESS(ERRBLOCK error, out ERRARRAY error_msg, short errsz);
 
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern void GETNMFDB(int recid, int ft, out NAMFTARR nmftbuff, out short numchars);
