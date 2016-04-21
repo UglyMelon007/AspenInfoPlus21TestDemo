@@ -61,8 +61,8 @@ namespace RTDB.IP21
         private static string ErrorMessage(infoplus21_api.ERRBLOCK errMsg)
         {
             byte[] err = new byte[78];
-            int errSize;
-            infoplus21_api.ERRMESS(ref errMsg, err, out errSize);
+            short errSize;
+            infoplus21_api.ERRMESS(ref errMsg, out err, out errSize);
             return Encoding.ASCII.GetString(err).Substring(0, errSize);
         }
 

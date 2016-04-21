@@ -444,10 +444,90 @@ namespace RTDB.IP21
         /// 返回一个与数据库错误块相对应的ASCII错误信息
         /// </summary>
         /// <param name="error">ERRBLOCK(ERRBLOCK)，引用传递，包含一个要被转换成ASCII的错误编码的错误块</param>
-        /// <param name="error_msg">ERRARRAY(ERRARRAY)，引用传递(out),为被转换成ASCII错误信息的数组</param>
+        /// <param name="error_msg">ERRARRAY(byte[])，引用传递(out),为被转换成ASCII错误信息的数组</param>
         /// <param name="errsz">short word(short),引用传递（out），返回信息的字符个数，剩下的字符被用空填充</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ERRMESS(ERRBLOCK error, out ERRARRAY error_msg, short errsz);
+        public static extern void ERRMESS(ref ERRBLOCK error, out byte[] error_msg, out  short errsz);
+
+        /// <summary>
+        /// 返回一个字段的数据库信息
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，这个记录ID</param>
+        /// <param name="ft">long word(int),值传递，记录中要被检查的字段标识。</param>
+        /// <param name="seq">long word(int),值传递，出现过的历史序列号，同上，非必需参数</param>
+        /// <param name="flddefninfo">FIELDDEFN(未知），引用传递，关于字段信息的缓冲地址</param>
+        /// <param name="stop">short word(short),引用传递out,磁盘历史状态码</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void FIELDDEFNINFO(int recid, int ft, int seq, out  FIELDDEFN flddefninfo, out  short stop, out ERRBLOCK error);
+
+        /// <summary>
+        /// 返回一个字段的数据库信息 
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，记录ID</param>
+        /// <param name="ft">long word(int),值传递，记录中被检查的字段标识</param>
+        /// <param name="datatype">short word(short),引用传递out，被定义在setcim.h文件内的数据类型指示</param>
+        /// <param name="dspchars">short word(short),引用传递out，这个字段的ASCII码个数</param>
+        /// <param name="inchars">short word(short),引用传递out，out允许插入入的最大字符个数</param>
+        /// <param name="unusacha">Byte(byte),引用传递out,如果这个记录不可用这个字段可被改变，返回TRUE</param>
+        /// <param name="usacha">Byte(byte),引用传递out,如果这个记录可用这个字段可被改变，返回TRUE</param>
+        /// <param name="nowopcha">Byte(byte),引用传递out,如果当前状态下这个字段可被改变，返回TRUE</param>
+        /// <param name="resizable">Byte(byte),引用传递out,如果这个字段是一个重复区域字段返回TRUE</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void FIELDINFO(int recid, int ft, out short datatype, out short dspchars, out short inchars, out byte unusacha, out byte usacha, out byte nowopcha, out byte resizable, out ERRBLOCK error);
+
+        /// <summary>
+        /// 得到一个记录内指定序号的字段的字段标识，和这个记录内的字段总个数
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，记录ID</param>
+        /// <param name="fldnum">long word(int),值传递，记录内的字段序号</param>
+        /// <param name="fldftid">long word(int),引用传递（out),字段标识</param>
+        /// <param name="numflds">long word(int),引用传递（out),返回的字段个数</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void FLDFT(int recid, int fldnum, out int fldftid, out int numflds);
+
+        /// <summary>
+        /// 若记录们不存在于文件夹内，将他们加进去
+        /// </summary>
+        /// <param name="folderid">long word(int),值传递，文件记录的ID</param>
+        /// <param name="records">long word(int[]),引用传递,要被加入文件夹的一组记录ID</param>
+        /// <param name="numrecs">short(short),值传递，要被加入文件夹的记录个数</param>
+        /// <param name="numok">short(short),引用传递out,添加成功的记录个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void FOLDERIN(int folderid, int[] records, short numrecs, out short numok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 从一个文件夹内移除一个记录
+        /// </summary>
+        /// <param name="folderid">long word(int),值传递，文件夹的记录ID</param>
+        /// <param name="records">long word(int[]),引用传递，要从文件夹内移除的的一组记录的记录ID</param>
+        /// <param name="numrecs">short(short),值传递，要被移除的记录的个数</param>
+        /// <param name="numok">short(short),引用传递，移除成功的记录个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void FOLDEROUT(int folderid, int[] records, short numrecs, out short numok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个字段名字转换为字段标识。若字段名无效则返回0
+        /// </summary>
+        /// <param name="ptbuff">character array(byte[]),引用传递，包含字段名字的缓冲地址</param>
+        /// <param name="numchars">short word(short),引用传递，缓冲的字符个数</param>
+        /// <returns>返回类型long word(int),若字段名字无效则返回0，否则返回字段标识</returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int FTNAME2FT(byte[] ptbuff, short numchars);
+
+        /// <summary>
+        /// 验证用户是否有参数wantedDbpermis指定的数据库权限。若用户有指定的权限，granted被设置为true。参数availDbpermis包含这个用户可用的唯一权限
+        /// </summary>
+        /// <param name="wantedDbPermis">long word(int)，值传递，要被检查的数据库权限</param>
+        /// <param name="granted">long word(int),引用传递out,若用户有指定权限则granted为true,否则为false</param>
+        /// <param name="availDbPermis">long word(int),引用传递out,</param>
+        /// <param name="err"></param>
+        /// <returns></returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GETDBPERMIS(int wantedDbPermis, out int granted, out int availDbPermis, ERRBLOCK err);
 
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern void GETNMFDB(int recid, int ft, out NAMFTARR nmftbuff, out short numchars);
@@ -524,9 +604,9 @@ namespace RTDB.IP21
         //        public static extern void RHIS21AGGREG(int timeweight, int step, int recid, int ft, ref XUSTS ptTimeOld, ref XUSTS ptTimeNew, ref XUSTS ptInterval, int timealign, int dsadjust, int maxperiods, int numtimecodes, int numdoublecodes, int numshortcodes, short[] timecodes, short[] doublecodes, short[] shortcodes, out XUSTS[,] timevalues, out double[,] doublevalues, out short[] shortvalues, out int numperiods, out ERRBLOCK err);
         public static extern void RHIS21AGGREG(int timeweight, int step, int recid, int ft, ref XUSTS ptTimeOld, ref XUSTS ptTimeNew, ref XUSTS ptInterval, int timealign, int dsadjust, int maxperiods, int numtimecodes, int numdoublecodes, int numshortcodes, short[] timecodes, short[] doublecodes, short[] shortcodes, IntPtr timevalues, IntPtr doublevalues, IntPtr shortvalues, out int numperiods, out ERRBLOCK err);
 
-        //解析错误信息
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-        public static extern void ERRMESS(ref ERRBLOCK errMsg, byte[] err, out int errsz);
+        ////解析错误信息
+        //[DllImport("infoplus21_api.dll", CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        //public static extern void ERRMESS(ref ERRBLOCK errMsg, out byte[] err, out int errsz);
 
         //断开
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
