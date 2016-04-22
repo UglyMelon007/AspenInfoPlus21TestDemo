@@ -523,19 +523,83 @@ namespace RTDB.IP21
         /// </summary>
         /// <param name="wantedDbPermis">long word(int)，值传递，要被检查的数据库权限</param>
         /// <param name="granted">long word(int),引用传递out,若用户有指定权限则granted为true,否则为false</param>
-        /// <param name="availDbPermis">long word(int),引用传递out,</param>
-        /// <param name="err"></param>
-        /// <returns></returns>
+        /// <param name="availDbPermis">long word(int),引用传递out,包含用户可用的数据库权限</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GETDBPERMIS(int wantedDbPermis, out int granted, out int availDbPermis, ERRBLOCK err);
+        public static extern int GETDBPERMIS(int wantedDbPermis, out int granted, out int availDbPermis, ERRBLOCK error);
 
+        /// <summary>
+        /// 返回数据库当前时间
+        /// </summary>
+        /// <param name="xtime">XTSBLOCK(XTSBLOCK),引用传递out,数据库的当前时间（xtime  is the current Aspen InfoPlus.21 time as an extended timestamp.）</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GETDBXTIM(out XTSBLOCK xtime);
+
+        /// <summary>
+        /// 验证一个用户是否有一个指定记录指定字段的写入权限
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含要检查字段的记录ID</param>
+        /// <param name="ft">long word(int),值传递，以ASCII格式命名的字段标识</param>
+        /// <param name="wantedFldPermis">long word(int),值传递，包含要被检查的字段权限</param>
+        /// <param name="granted">long word(int),引用传递（out），若有相应的权限则返回TRUE</param>
+        /// <param name="availFldPermis">long word(int),引用传递（out），包含这个用户对这个字段的可用权限</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GETFLDPERMIS(int recid, int ft, int wantedFldPermis, out int granted, out int availFldPermis, out ERRBLOCK error);
+
+        /// <summary>
+        /// 根据指定的记录ID和字段标识返回字段名字
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，指定的记录ID</param>
+        /// <param name="ft">long word(int),值传递，指定的字段标识</param>
+        /// <param name="ftbuff">FINMARR(FINMARR),引用传递out,包含字段名字的字符缓冲</param>
+        /// <param name="numchars">short word(short)，字段名字的大小</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GETFTDB(int recid, int ft, FINMARR ftbuff, out short numchars);
+
+        /// <summary>
+        /// 根据记录ID返回记录名字
+        /// </summary>
+        /// <param name="recid">long word(int),引用传递ref,记录ID,若无效，则为0</param>
+        /// <param name="nambuff">NAMERR(NAMERR),引用传递out,包含记录名的字符缓冲</param>
+        /// <param name="numchars">short word(short),引用传递out,记录名字的大小</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GETNAMDB( ref int recid, out NAMERR nambuff, out short numchars);
+
+        /// <summary>
+        /// 通过指定的记录ID和字段标识返回记录名和字段名
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含指定字段的记录ID</param>
+        /// <param name="ft">long word(int),值传递，字段标识（The occurrence number is required.）</param>
+        /// <param name="nmftbuff">NAMFTARR(NAMFTARR),引用传递，包含记录名与字段名的字符缓冲（including the occurrence if in a repeat area）</param>
+        /// <param name="numchars">short word(short),引用传递out，被使用的缓冲大小</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern void GETNMFDB(int recid, int ft, out NAMFTARR nmftbuff, out short numchars);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lastrecid"></param>
+        /// <param name="rectype"></param>
+        /// <param name="alphaorder"></param>
+        /// <param name="grouplist"></param>
+        /// <param name="groupsize"></param>
+        /// <param name="viewreq"></param>
+        /// <param name="modifyreq"></param>
+        /// <param name="maxrecs"></param>
+        /// <param name="recids"></param>
+        /// <param name="recusabs"></param>
+        /// <param name="recnames"></param>
+        /// <param name="namesizes"></param>
+        /// <param name="numrecs"></param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GETRECLIST(ref int lastrecid, int rectype, int alphaorder, byte[] grouplist, int groupsize, int viewreq, int modifyreq, int maxrecs, out int[] recids, out byte[] recusabs, out NAMEARR[] recnames, out short[] namesizes, out int numrecs);
+
         #endregion
 
-        //得到时间
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GETDBXTIM(out XTSBLOCK current_xts);
+        ////得到时间
+        //[DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        //public static extern void GETDBXTIM(out XTSBLOCK current_xts);
 
         //时间转化
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
