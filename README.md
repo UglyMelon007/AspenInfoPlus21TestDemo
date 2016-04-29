@@ -17,7 +17,7 @@ AspenInfoPlus.21 API
 |long word array       | `int[]`  |
 |short word array      | `short[]` |
 |character array       | `byte[]`|
-|byte array       | `byte[]`|
+|byte array            | `byte[]`|
 |XTSBLOCK			   |XTSBLOCK|
 |ERRARRAY              | `byte[]`|
 |ERRBLOCK              | ERRBLOCK  |
@@ -25,6 +25,8 @@ AspenInfoPlus.21 API
 |FIELDDEFN|未知|
 
 ***
+**记录类型标识**
+
 |RecordType|Identifier|
 |----------|----------|
 |lAny Record  |RTYPANYRECORD |
@@ -46,6 +48,22 @@ AspenInfoPlus.21 API
 |Select Descriptor Record Definition Record |RTYPDEFSELECT |
 |Disk History Record Definition Record  |RTYPDEFDSKHIST |
 ***
+
+**字段的几种写权限**  
+* AT_PERMIS_NONE  (no permission) 
+* AT_PERMIS_REC_WRITE_GENERAL 
+* AT_PERMIS_REC_WRITE_RESTRICTED 
+* AT_PERMIS_REC_WRITE_SYSTEM 
+***
+
+**error.ERRCODE的几种可用值**  
+* NOREC 
+* INVEXTSK 
+* OPSCGCSI 
+* RDSCGCSI 
+* RFSCGCSI 
+* WRSCGCSI
+
 **关键字**:  
 Access Output only   
 Mechanism  Passed by reference  
