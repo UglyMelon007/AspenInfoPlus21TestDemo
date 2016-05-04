@@ -551,7 +551,7 @@ namespace RTDB.IP21
         /// <param name="nambuff">NAMERR(NAMERR),引用传递out,包含记录名的字符缓冲</param>
         /// <param name="numchars">short word(short),引用传递out,记录名字的大小</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GETNAMDB( ref int recid, out NAMERR nambuff, out short numchars);
+        public static extern void GETNAMDB(ref int recid, out NAMERR nambuff, out short numchars);
 
         /// <summary>
         /// 通过指定的记录ID和字段标识返回记录名和字段名
@@ -601,7 +601,7 @@ namespace RTDB.IP21
         /// <param name="writeLevel">long word(int),引用传递out,字段的写权限（字段的几种写权限看REMADE.md)</param>
         /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GETWRITELEVEL(int recid, int  ft, out int writeLevel, out ERRBLOCK error);
+        public static extern void GETWRITELEVEL(int recid, int ft, out int writeLevel, out ERRBLOCK error);
 
         /// <summary>
         ///得到并或者改变这个历史重复区域的内一个记录的最早允许时间(这都是啥呀，看不懂 :dog: )
@@ -612,7 +612,7 @@ namespace RTDB.IP21
         /// <param name="oldoldest">long word(int),引用传递out,上一个被允许的最早时间</param>
         /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void HISOLDESTOK(int id, int  ft, int  newoldest, out int oldoldest, out ERRBLOCK error);
+        public static extern void HISOLDESTOK(int id, int ft, int newoldest, out int oldoldest, out ERRBLOCK error);
 
         /// <summary>
         /// 将一个整数转换为一个数据库字段指定格式的ASCII
@@ -625,7 +625,7 @@ namespace RTDB.IP21
         /// <param name="numchars">short word(short),引用传递out,被写入ptbuff内的字符个数，最大为maxchars</param>
         /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void I2ASCIIDB(int recid, int ft, int  intdata, ref byte[] ptbuff,  short maxchars, out short numchars, out ERRBLOCK error);
+        public static extern void I2ASCIIDB(int recid, int ft, int intdata, ref byte[] ptbuff, short maxchars, out short numchars, out ERRBLOCK error);
 
         /// <summary>
         /// 将一个记录ID和一个字段标识写入数据库
@@ -674,16 +674,320 @@ namespace RTDB.IP21
         /// <summary>
         /// 将一条信息添加到一个日志记录
         /// </summary>
-        /// <param name="recid">long word(int),值传递,</param>
+        /// <param name="recid">long word(int),值传递,如果信息被记入由logctrlid指定的日志控件内的所有日志记录列表内recid为0。如果recid不为0，则为要写入记录的记录Id.(具体详细看pdf)</param>
         /// <param name="logctrlid">long word(int),值传递,日志控件记录的记录ID</param>
         /// <param name="ptmess">character array(byte[]),引用传递ref,信息组（就是一个字符串）</param>
         /// <param name="numchars">short word(short),值传递，信息的字符个数</param>
         /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern void LOGMESS(int recid, int logctrlid, ref byte[] ptmess, short numchars, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个长整型写入数据库(datatype=DTPLONG)
+        /// </summary>
+        /// <param name="recid">long word(int)，值类型传递，包含字段的记录ID</param>
+        /// <param name="ft">long word(int)，值类型传递，要写入字段的字段标识</param>
+        /// <param name="intdata">long word(int)，值类型传递，要写入的长整型值</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void LONG2DB(int recid, int ft, int intdata, out ERRBLOCK error);
+
+        /// <summary>
+        /// 使一个记录不可用。这个记录不能被其它记录引用。
+        /// </summary>
+        /// <param name="recid">long word(int)，值传递，记录ID</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void MAKUNUSA(int recid, out ERRBLOCK error);
+
+        /// <summary>
+        /// 使一个记录可用
+        /// </summary>
+        /// <param name="recid">long word(int)，值传递，记录ID</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void MAKUSABL(int recid, out ERRBLOCK error);
+
+        /// <summary>
+        /// 从一个数据库记录的一个重复区域的多个事件里阅读多个字段
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含重复区域的记录ID</param>
+        /// <param name="numfts">short word(short)，值传递，每个事件里读的字段个数</param>
+        /// <param name="ptfts">long word array(int[]),引用传递ref, 包含从每个事件内阅读的字段的字段标识。</param>
+        /// <param name="ptdtypes">short word array(short[]),引用传递ref，要去阅读的字段的类型标识，数组内的每一个元素是一个定义在setcim.h头文件内的数据类型</param>
+        /// <param name="frstoc">short word(short),值传递开始阅读的事件编号</param>
+        /// <param name="lastoc">short word(short),值传递，结束阅读的事件编号</param>
+        /// <param name="ptdatas">array of address(object[])，引用传递out,一组阅读结果。这个数组必须足够大来包含所有阅读结果。</param>
+        /// <param name="occsok">short word(short),引用传递out,实际阅读的事件个数</param>
+        /// <param name="ftsok">short word(short),引用传递out,实际阅读的字段个数。若没有错误，则等于numfts</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void MRDBOCCS(int recid, short numfts, ref int[] ptfts, ref short[] ptdtypes, short frstoc, short lastoc, out object[] ptdatas, out short occsok, out short ftsok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 从数据库内多个记录内读取多个字段
+        /// </summary>
+        /// <param name="numvalus">short word(short),值传递，要去阅读的值的个数</param>
+        /// <param name="fields">IDANDFT(IDANDFT),引用传递ref，一组要去阅读的记录和字段ID</param>
+        /// <param name="ptdtypes">short word array(short[]),引用传递ref，包含要去阅读字段的数据类型</param>
+        /// <param name="ptdatas">type aligned address(object[])，引用传递out,阅读结果。  </param>
+        /// <param name="numok">short word(short)，引用传递(ref),阅读的值的真实个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void MRDBVALS(short numvalus, ref IDANDFT[] fields, ref short[] ptdtypes, out object[] ptdatas, out short numok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将多个事件的多个字段写入一个数据库记录的重复区域内
+        /// </summary>
+        /// <param name="recid">long word(int)，值传递，包含重复区域的记录ID</param>
+        /// <param name="numfts">short word(short),值传递，写入每个事件内的字段个数</param>
+        /// <param name="ptfts">long word array(int[]),引用传递，包含要写入每个事件的字段的字段标识。</param>
+        /// <param name="ptdtypes">short word array(short[]),引用传递ref,一组要写入的字段的类型标识</param>
+        /// <param name="frstoc">short word(short),值传递，开始写入事件的事件编号</param>
+        /// <param name="lastoc">short word(short),值传递，结束事件的事件编号</param>
+        /// <param name="ptdatas">arrray of addresses(object[])，引用传递out,一组地址.</param>
+        /// <param name="occsok">short word(short)，引用传递out,被写入的真实事件个数</param>
+        /// <param name="ftsok">short word(short),引用传递out,被写入的真实字段个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void WDBOCCS(int recid, short numfts, ref int[] ptfts, out short[] ptdtypes, short frstoc, short lastoc, out object[] ptdatas, out short occsok, out short ftsok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将多个字段写入数据库的多个记录内
+        /// </summary>
+        /// <param name="numvalus">short word(short),值传递，要写入的值的个数</param>
+        /// <param name="fields">IDANDFT array(IDANDFT[]),引用传递ref,一组要被写入的记录ID和字段ID</param>
+        /// <param name="ptdtypes">short word array(short[]),引用传递ref,一个数组分别对应fields内字段的数据类型</param>
+        /// <param name="ptdatas">type aligned address(object[]),要被写入的最终数据</param>
+        /// <param name="numok">short word(short),引用传递out,被写入的真实个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void MWDBVALS(short numvalus, ref IDANDFT[] fields, ref short[] ptdtypes, ref object[] ptdatas, out short numok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 返回一个定义记录的记录名大小
+        /// </summary>
+        /// <param name="defid">long word(int),值传递,定义记录的记录ID</param>
+        /// <returns>short word(short),返回定义的记录记录名字段的大小</returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern short NAMSZDEF(int defid);
+
+        /// <summary>
+        /// 根据一个指定的记录和指定字段查找下一个引用
+        /// </summary>
+        /// <param name="idcheck">long word(int），值传递，要被检查的记录ID</param>
+        /// <param name="ftcheck">long word(int),值传递，要被检查的字段标识。如果为0，查找idcheck包含的定义记录的所有引用。若不为0，查找这个字段的所有引用</param>
+        /// <param name="ptiduse">long word(int),引用传递out,当进入时，如果ptiduse为0，开始时，若ptiduse为0，则从最初开始查找。如果不等于0，则从指定的记录后（ptiduse,ptftuse)开始查找.</param>
+        /// <param name="ptftuse">long word(int),引用传递out,退出时，ptftuse是idcheck记录的字段的字段标识</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void NXTREFER(int idcheck, int ftcheck, out int ptiduse, out int ptftuse);
+
+        /// <summary>
+        /// 将一个数值转换为一个数据库字段指定的格式的ASCII
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，字段标识的记录ID</param>
+        /// <param name="ft">long word(int),值传递，定义这个格式的字段的字段标识</param>
+        /// <param name="realdata">single/double precision real(double),值传递，要被转换的数字。</param>
+        /// <param name="ptbuff">character array(byte[]),引用传递(out)，转换完的结果</param>
+        /// <param name="maxchars">short word(short),值传递，ptbuff的最大个数</param>
+        /// <param name="numchars">short word(short)，引用传递out,实际应该写入的字符个数。若比maxchars大则只有maxchars个字符被写入</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void R2ASCIIDB(int recid, int ft, double realdata, out byte[] ptbuff, short maxchars, out short numchars, ERRBLOCK error);
+
+        /// <summary>
+        /// 读取数据库内的一个字段并转换为ASCII.ASCII转换格式由字段的显示格式定义
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含数据的记录ID</param>
+        /// <param name="ft">long word(int)，值传递，包含数据的字段标识</param>
+        /// <param name="ptbuff">character array (byte[]), 引用传递out,转换完成的结果</param>
+        /// <param name="maxchars">short word(short),值传递，ptbuff的最大个数</param>
+        /// <param name="numchars">short word(short)，引用传递out,实际应该写入的字符个数。若比maxchars大则只有maxchars个字符被写入</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RDBASCII(int recid, int ft, out byte[] ptbuff, short maxchars, out short numchars, ERRBLOCK error);
+
+        /// <summary>
+        /// 从一个数据库记录内阅读多个事件的单精度字段
+        /// </summary>
+        /// <param name="recid">long word(int)，值传递，要被访问的记录ID.</param>
+        /// <param name="ft">long word(int)，值传递，重复区域内事件编号为0的字段标识</param>
+        /// <param name="frstoc">short word(short),值传递，开始阅读的事件编号</param>
+        /// <param name="lastoc">shor word(short),值传递,结束的事件编号</param>
+        /// <param name="datatype">short word(short),值传递，被定义在setcim.h头文件中的数据类型</param>
+        /// <param name="ptdatas">type aligned address（obejct),引用传递out,阅读的数据</param>
+        /// <param name="numok">short word(short),引用传递out,真正阅读的事件个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RDBOCCS(int recid, int ft, short frstoc, short lastoc, short datatype, out object[] ptdatas, out short numok, ERRBLOCK error);
+
+        /// <summary>
+        /// 从一个数据库记录内阅读多个值
+        /// </summary>
+        /// <param name="recid">long word(int)，值传递，要被访问的记录ID</param>
+        /// <param name="numvalus">short word(short),值传递，要读取的值的个数</param>
+        /// <param name="ptfts">long word array(int[]),引用传递，一组要去阅读的字段标识</param>
+        /// <param name="ptdtypes">short word array(short[]),引用传递，ptfts类字段的数据类型。</param>
+        /// <param name="ptdatas">type aligned address(object[]),引用传递，读取的数据。通常是一个结构。</param>
+        /// <param name="numok">short word(short),引用传递out,取到数据的个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RDBVALS(int recid, short numvalus, ref int[] ptfts, ref short[] ptdtypes, out object[] ptdatas, out short numok, ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个数字写入数据库。 (data type = DTYPREAL).
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含数据的记录的记录ID</param>
+        /// <param name="ft">long word(int),值传递，包含数据的字段的字段标识</param>
+        /// <param name="realdata">single precision real(float),要被写入数据库的数据</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void REALADD2DB(int recid, int ft, float realdata, ERRBLOCK error);
+
+        /// <summary>
+        /// 获得数据库内最可用的记录ID
+        /// </summary>
+        /// <returns>long word(int),返回数据库内最可用ID</returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int RECIDMAX();
+
+        /// <summary>
+        /// 如果给定的记录类型为给定的类型返回TRUE
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，记录ID</param>
+        /// <param name="rectype">long word(int),值传递，为recid定义的记录的记录ID，或表(记录类型标识(TWO)，README.md)中所标识的记录类型</param>
+        /// <returns>integer(int),如果为指定的类型则返回一个非0值，反之则返回0</returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int RECTYPEOK(int recid, int rectype);
+
+        /// <summary>
+        /// 将一个记录ID写入数据库(data type = DTYREID).
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含字段的记录的记录ID</param>
+        /// <param name="ft">long word(int),值传递，要被写入哪个字段的字段标识</param>
+        /// <param name="iddata">long word(int),值传递，记录ID的值</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void REID2DB(int recid, int ft, int iddata, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个快照磁盘文件读入数据库(warning:这个方法将覆盖当前数据库)
+        /// </summary>
+        /// <param name="ptfname">character array(byte[]),引用传递ref,包含文件名的byte串</param>
+        /// <param name="numchars">short word(short),值传递，pftname的长度</param>
+        /// <param name="blksin">long word(int),引用传递out,阅读的磁盘块个数</param>
+        /// <param name="wordsin">long word(int),引用传递out,读取的单词个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RESTORSNAP(ref byte[] ptfname, short numchars, out int blksin, out int wordsin, out ERRBLOCK error);
+
+        /// <summary>
+        /// 以有用的时候再对比改下
+        /// </summary>
+        /// <param name="timeweight"></param>
+        /// <param name="step"></param>
+        /// <param name="recid"></param>
+        /// <param name="ft"></param>
+        /// <param name="ptTimeOld"></param>
+        /// <param name="ptTimeNew"></param>
+        /// <param name="ptInterval"></param>
+        /// <param name="timealign"></param>
+        /// <param name="dsadjust"></param>
+        /// <param name="maxperiods"></param>
+        /// <param name="numtimecodes"></param>
+        /// <param name="numdoublecodes"></param>
+        /// <param name="numshortcodes"></param>
+        /// <param name="timecodes"></param>
+        /// <param name="doublecodes"></param>
+        /// <param name="shortcodes"></param>
+        /// <param name="timevalues"></param>
+        /// <param name="doublevalues"></param>
+        /// <param name="shortvalues"></param>
+        /// <param name="numperiods"></param>
+        /// <param name="error"></param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RHIS21AGGREG(int timeweight, int step, int recid, int ft, ref XUSTS ptTimeOld, ref XUSTS ptTimeNew, ref XUSTS ptInterval, int timealign, int dsadjust, int maxperiods, int numtimecodes, int numdoublecodes, int numshortcodes, ref short[] timecodes, ref short[] doublecodes, ref short[] shortcodes, out XUSTS[] timevalues, out double[] doublevalues, out short[] shortvalues, out int numperiods, out ERRBLOCK error);
+
+        /// <summary>
+        /// 以有用时对比
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="step"></param>
+        /// <param name="outsiders"></param>
+        /// <param name="recid"></param>
+        /// <param name="ft"></param>
+        /// <param name="timeold"></param>
+        /// <param name="timenew"></param>
+        /// <param name="numfts"></param>
+        /// <param name="fts"></param>
+        /// <param name="datatypes"></param>
+        /// <param name="maxoccs"></param>
+        /// <param name="keylevels"></param>
+        /// <param name="keytimes"></param>
+        /// <param name="ptdatas"></param>
+        /// <param name="ptoccsok"></param>
+        /// <param name="ftsok"></param>
+        /// <param name="error"></param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RHIS21DATA(int mode, int step, int outsiders, int recid, int ft, ref XUSTS timeold, ref XUSTS timenew, short numfts, ref int[] fts, ref short[] datatypes, int maxoccs, out short[] keylevels, out XUSTS[] keytimes, out string[] ptdatas, out int ptoccsok, out short ftsok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 阅读多个事件里的多个历史字段，按时间先后顺序（最早的最先开始）阅读，并且将读取的值存进多个数据组里面。同时阅读内存重复区域和磁盘历史重复区域。
+        /// </summary>
+        /// <param name="spare1"></param>
+        /// <param name="spare2"></param>
+        /// <param name="spare3"></param>
+        /// <param name="spare4"></param>
+        /// <param name="ecid"></param>
+        /// <param name="ft"></param>
+        /// <param name="timenew"></param>
+        /// <param name="timeold"></param>
+        /// <param name="numfts"></param>
+        /// <param name="fts"></param>
+        /// <param name="datatypes"></param>
+        /// <param name="maxoccs"></param>
+        /// <param name="keylevels"></param>
+        /// <param name="keytimes"></param>
+        /// <param name="ptdatas"></param>
+        /// <param name="occsok"></param>
+        /// <param name="ftsok"></param>
+        /// <param name="error"></param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RHIS21REV(int spare1, int spare2, int spare3, int spare4, int ecid, int ft, ref XUSTS timenew, ref XUSTS timeold, short numfts, ref int[] fts, ref short[] datatypes, int maxoccs, out short[] keylevels, out XUSTS[] keytimes, out string[] ptdatas, out int occsok, out short ftsok, out ERRBLOCK error);
         #endregion
 
+        ////读统计值
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        //        public static extern void RHIS21AGGREG(int timeweight, int step, int recid, int ft, ref XUSTS ptTimeOld, ref XUSTS ptTimeNew, ref XUSTS ptInterval, int timealign, int dsadjust, int maxperiods, int numtimecodes, int numdoublecodes, int numshortcodes, short[] timecodes, short[] doublecodes, short[] shortcodes, out XUSTS[,] timevalues, out double[,] doublevalues, out short[] shortvalues, out int numperiods, out ERRBLOCK err);
+        public static extern void RHIS21AGGREG(int timeweight, int step, int recid, int ft, ref XUSTS ptTimeOld, ref XUSTS ptTimeNew, ref XUSTS ptInterval, int timealign, int dsadjust, int maxperiods, int numtimecodes, int numdoublecodes, int numshortcodes, short[] timecodes, short[] doublecodes, short[] shortcodes, IntPtr timevalues, IntPtr doublevalues, IntPtr shortvalues, out int numperiods, out ERRBLOCK err);
+
+        //时间转化
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void XTS2XUST(ref XTSBLOCK xts, out XUSTS xusts);
+
+        //初始化网络
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int DaInitialize(int login);
+
+        //选择服务器
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int DaSelectServer(int ServerIndex, out ERRBLOCK ErrorBlock);
+
+        //添加服务器连接两个作用：
+        //连接一个不存在于最初配置文件列表里的数据库
+        //不使用配置文件，只在需要的时候连接数据库。
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int DaAddServer(byte[] constring, out ERRBLOCK errMsg);
+
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RHIS21DATA(int mode, int step, int outSiders, int tagId, int propertyId, ref XUSTS startTime, ref XUSTS endTime, short numfts, int[] fts, short[] datatypes, int maxoccus, short[] keylevels, XUSTS[] keyTimes, IntPtr[] ptdatas, out int occsok, out short ftsok, out ERRBLOCK errMsg);
+
+        //断开
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void DaShutdown();
+
         #region
+
         ////在程序退出之前调用ENDSETC() 
         ////关闭所有服务节点连接 消毁服务列表函数并释放所有资源
         ////程序不应该调用它除非当程序退出时
@@ -746,34 +1050,5 @@ namespace RTDB.IP21
         //public static extern void ERRMESS(ref ERRBLOCK errMsg, out byte[] err, out int errsz);
         #endregion
 
-        //时间转化
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void XTS2XUST(ref XTSBLOCK xts, out XUSTS xusts);
-
-        //初始化网络
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int DaInitialize(int login);
-
-        //选择服务器
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int DaSelectServer(int ServerIndex, out ERRBLOCK ErrorBlock);
-
-        //添加服务器连接两个作用：
-        //连接一个不存在于最初配置文件列表里的数据库
-        //不使用配置文件，只在需要的时候连接数据库。
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int DaAddServer(byte[] constring, out ERRBLOCK errMsg);
-
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void RHIS21DATA(int mode, int step, int outSiders, int tagId, int propertyId, ref XUSTS startTime, ref XUSTS endTime, short numfts, int[] fts, short[] datatypes, int maxoccus, short[] keylevels, XUSTS[] keyTimes, IntPtr[] ptdatas, out int occsok, out short ftsok, out ERRBLOCK errMsg);
-
-        //读统计值
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        //        public static extern void RHIS21AGGREG(int timeweight, int step, int recid, int ft, ref XUSTS ptTimeOld, ref XUSTS ptTimeNew, ref XUSTS ptInterval, int timealign, int dsadjust, int maxperiods, int numtimecodes, int numdoublecodes, int numshortcodes, short[] timecodes, short[] doublecodes, short[] shortcodes, out XUSTS[,] timevalues, out double[,] doublevalues, out short[] shortvalues, out int numperiods, out ERRBLOCK err);
-        public static extern void RHIS21AGGREG(int timeweight, int step, int recid, int ft, ref XUSTS ptTimeOld, ref XUSTS ptTimeNew, ref XUSTS ptInterval, int timealign, int dsadjust, int maxperiods, int numtimecodes, int numdoublecodes, int numshortcodes, short[] timecodes, short[] doublecodes, short[] shortcodes, IntPtr timevalues, IntPtr doublevalues, IntPtr shortvalues, out int numperiods, out ERRBLOCK err);
-
-        //断开
-        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DaShutdown();
     }
 }
