@@ -11,6 +11,7 @@ AspenInfoPlus.21 API
 |byte                  | byte  |
 |short word            | short|
 |short                 | short|
+|character             | short|
 |Double precision real | double  |
 |single precision real | float|
 |Pointer to data       | string  |
@@ -20,10 +21,11 @@ AspenInfoPlus.21 API
 |byte array            | `byte[]`|
 |array of addresses    | `object[]`|
 |type aligned address  | `object[]`|
+|pointer array		   | `string[]`|
 |ERRARRAY              | `byte[]`|
 |XTSBLOCK			   |XTSBLOCK|
 |ERRBLOCK              | ERRBLOCK  |
-|IDANDFT               | IDANDFT  (不准）|
+|IDANDFT               | IDANDFT  |
 |FIELDDEFN|未知|
 
 ***

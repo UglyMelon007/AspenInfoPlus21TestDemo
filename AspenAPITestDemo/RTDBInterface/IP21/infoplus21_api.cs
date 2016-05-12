@@ -934,26 +934,84 @@ namespace RTDB.IP21
         /// <summary>
         /// 阅读多个事件里的多个历史字段，按时间先后顺序（最早的最先开始）阅读，并且将读取的值存进多个数据组里面。同时阅读内存重复区域和磁盘历史重复区域。
         /// </summary>
-        /// <param name="spare1"></param>
-        /// <param name="spare2"></param>
-        /// <param name="spare3"></param>
-        /// <param name="spare4"></param>
-        /// <param name="ecid"></param>
-        /// <param name="ft"></param>
-        /// <param name="timenew"></param>
-        /// <param name="timeold"></param>
-        /// <param name="numfts"></param>
-        /// <param name="fts"></param>
-        /// <param name="datatypes"></param>
-        /// <param name="maxoccs"></param>
-        /// <param name="keylevels"></param>
-        /// <param name="keytimes"></param>
-        /// <param name="ptdatas"></param>
-        /// <param name="occsok"></param>
-        /// <param name="ftsok"></param>
-        /// <param name="error"></param>
+        /// <param name="spare1">Integer(int)，值传递，目前未使用，应该为0</param>
+        /// <param name="spare2">Integer(int)，值传递，目前未使用，应该为0</param>
+        /// <param name="spare3">Integer(int)，值传递，目前未使用，应该为0</param>
+        /// <param name="spare4">Integer(int)，值传递，目前未使用，应该为0</param>
+        /// <param name="ecid">long word(int),值传递，包含历史重复区域的记录ID</param>
+        /// <param name="ft">long word(int),值传递，历史重复区域内字段的字段标识（必须有一个可用的事件编号，例如0）或一个计数字段标签（必须有一个事件编号）</param>
+        /// <param name="timenew">XUSTS(XUSTS),引用传递ref,是一个扩展的时间戳单位微秒.从啥时候开始阅读</param>
+        /// <param name="timeold">XUSTS(XUSTS),引用传递ref,是一个扩展的时间戳单位微秒.到哪个时间结束</param>
+        /// <param name="numfts">short word(short)，值传递，从每个事件里阅读的事件个数。是fts,ptdatas的成员个数</param>
+        /// <param name="fts">long word array(int[]),引用传递ref,一组要去阅读的字段标识。</param>
+        /// <param name="datatypes">short word array(short[]),引用传递ref,一组要去阅读的字段字段类型</param>
+        /// <param name="maxoccs">long word(int),值传递，要阅读的最大事件个数。</param>
+        /// <param name="keylevels">short word array(short[]),引用传递out,</param>
+        /// <param name="keytimes">XUSTS array(XUSTS[]),引用传递out,</param>
+        /// <param name="ptdatas">pointer array(string[]),引用传递out,一个字符串数组，每个字段对应一个字符串</param>
+        /// <param name="occsok">long word(int),引用传递out,返回阅读的事件个数。</param>
+        /// <param name="ftsok">short word(short),引用传递out,返回阅读的字段个数。</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern void RHIS21REV(int spare1, int spare2, int spare3, int spare4, int ecid, int ft, ref XUSTS timenew, ref XUSTS timeold, short numfts, ref int[] fts, ref short[] datatypes, int maxoccs, out short[] keylevels, out XUSTS[] keytimes, out string[] ptdatas, out int occsok, out short ftsok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 返回根文件夹的ID
+        /// </summary>
+        /// <returns>返回根文件夹的ID</returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ROOTFOLDER();
+
+        /// <summary>
+        /// 将一个数据库快照写入一个磁盘文件
+        /// </summary>
+        /// <param name="ptfname">character array(byte[]),引用传递ref,包含字段名的byte串</param>
+        /// <param name="numchars">short word(short)，值父传递，ptfname的长度</param>
+        /// <param name="blksout">long word(int),引用传递out,写入的磁盘块数</param>
+        /// <param name="wordsin">long word(int),引用传递out,数据库写入磁盘的单词个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SAVESNAP(ref short[] ptfname, short numchars, out int blksout, out int wordsin, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个short类型数据写入数据库 (data type = DTYPSHRT).
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含字段ft的记录的记录ID</param>
+        /// <param name="ft">long word(int),值传递，数据要写入的字段的字段标识</param>
+        /// <param name="shrtdata">short word(short),值传递，要写入的数据</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SHRT2DB(int recid, int ft, short shrtdata, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个时间戳转换为当前InfoPlus.21ASCII时间日期格式
+        /// </summary>
+        /// <param name="timestmp">long word(int),值传递，要格式化的时间戳</param>
+        /// <param name="ptbuff">character(short),引用传递，返回的格式化时间</param>
+        /// <param name="sizebuff">short word(short),值传递，指定ptbuff的大小。有效大小为15,18,20。设置为其它将导致出错并设为1</param>
+        /// <param name="error">byte(byte),引用传递(out),0没错，1有错</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void TMST2ASCII(int timestmp, out short ptbuff, short sizebuff, out byte error);
+
+        /// <summary>
+        /// 将一个AspenInfoPlus.21时间戳转换为相应的扩展时间戳。
+        /// </summary>
+        /// <param name="timestamp">long word(int),值传递，要被转换的时间戳。</param>
+        /// <param name="xts">XTSBLOCK(XTSBLOCK),引用传递（out),转换完的结果</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void TS2XTS(int timestamp, XTSBLOCK xts);
+
+        /// <summary>
+        /// 检查一个记录是不是可用状态
+        /// </summary>
+        /// <param name="recid">long word(int),要检查的记录的记录ID</param>
+        /// <returns>若记录可用返回true</returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern byte VALIDUSA(int recid);
+
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern byte WDBASCII(int recid);
+
         #endregion
 
         ////读统计值
