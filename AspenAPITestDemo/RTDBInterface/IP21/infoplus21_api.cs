@@ -1009,9 +1009,91 @@ namespace RTDB.IP21
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte VALIDUSA(int recid);
 
+        /// <summary>
+        /// 将输入转换成ASCII并将它写入数据库字段中。将转换成相应的字段的字段类型。
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，包含数据的数据ID</param>
+        /// <param name="ft">long word(int),值传递，包含数据的字段的字段标识</param>
+        /// <param name="ptbuff">character array(byte[]),引用传递ref,包含ASCII数据的byte数组</param>
+        /// <param name="numchars">short word(short),值传递，指定ptbuff的字符个数</param>
+        /// <param name="operat">byte(byte),值传递，如果为true,o.o</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern byte WDBASCII(int recid);
+        public static extern void WDBASCII(int recid, int ft, ref byte[] ptbuff, short numchars, byte operat, out ERRBLOCK error);
 
+        /// <summary>
+        /// 将一个值写入数据库中一个记录内一个字段的多个事件中
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，要读取的记录的记录ID</param>
+        /// <param name="ft">long word(int),值传递，重复区域的字段的字段标识并且它的事件编号设为0.如果这个字段是一个COS字段指针并且如果每个事件被写入的数据一致，激活的生成将一致</param>
+        /// <param name="frstoc">short word(short),值传递,从哪个事件编号开始写</param>
+        /// <param name="lastoc">short word(short),值传递，写到哪个事件编号结束</param>
+        /// <param name="datatype">short word(short),值传递，字段的数据类型（被定义在sectim.h头文件中）。</param>
+        /// <param name="ptdatas">type aligned address(object[]),引用传递ref,要写入的数据.数据的边界值是连续的。</param>
+        /// <param name="numok">short word（short),引用传递out,实际被写入数据的事件个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void WDBOCCS(int recid, int ft, short frstoc, short lastoc, short datatype, ref object[] ptdatas, out short numok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将多个数据写进数据库内一个字段中
+        /// </summary>
+        /// <param name="recid">long word(int),值传递，要读取的记录的记录ID</param>
+        /// <param name="numvalus">short word(short),值传递，要写的数据的个数</param>
+        /// <param name="ptfts">long word array(int[]),引用传递ref,一串要被写入数据的字段的字段标识。</param>
+        /// <param name="ptdtypes">short word array(short[]),引用传递ref,ptfts中字段的字段类型。</param>
+        /// <param name="ptdatas">type aligned address(object[]),引用传递ref,要写入的数据。 </param>
+        /// <param name="numok">short word(short),引用传递out,写入成功的数据个数。</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void WDBVALS(int recid, short  numvalus, ref int[] ptfts, ref short[] ptdtypes, ref object[] ptdatas, out short numok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 写多个历史字段的一个
+        /// </summary>
+        /// <param name="mode">integer(int),值传递，请求的类型。有效的值:WHIS_TYPE_MODIFY − Modify,WHIS_TYPE_ADDNEW,WHIS_TYPE_UPDATE(存在则修改，不存在则添加)</param>
+        /// <param name="recid">long word(int)，值传递，包含历史重复区域的记录的记录ID</param>
+        /// <param name="ft">long word(int),值传递，历史重复区域的中的字段的字段标识 </param>
+        /// <param name="numfts">short word(short),值传递，每个事件中被写入的事件个数。</param>
+        /// <param name="fts">long word array(int[]),一组字段的字段标识。</param>
+        /// <param name="datatypes">short word array(short[]),一组数据类型</param>
+        /// <param name="ptdatas">pointer array(string[]),引用传递ref,一组要被写入的数据</param>
+        /// <param name="keylevel">short word(short),值传递，要被写入事件的优先级别。若没设置则默认为-1</param>
+        /// <param name="keytime">XUSTS(XUSTS),引用传递ref，事件被更新或创建的时间</param>
+        /// <param name="ftsok">short word（short),引用传递out,返回被写入的字段个数</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void WHIS21DAT(int mode, int  recid, int  ft, short numfts, ref int[] fts, ref short[] datatypes, ref string[] ptdatas, short keylevel, XUSTS keytime, short  ftsok, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个外部时间写入数据库
+        /// </summary>
+        /// <param name="recid">long word(int),包含字段的记录的记录ID</param>
+        /// <param name="ft">long word(int),值传递，要被写入字段的字段标识</param>
+        /// <param name="xtsdata">XTSBLOCK(XTSBLOCK),引用传递ref,要写入的时间戳</param>
+        /// <param name="error">ERRBLOCK(ERRBLOCK),引用传递（out），返回在setcim.h中定义的错误编码</param>
+        /// <returns></returns>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern byte XTIM2DB(int recid, int ft, ref XTSBLOCK xtsdata, out ERRBLOCK error);
+
+        /// <summary>
+        /// 将一个外部时间戳转换为当前AspenInfoPlus.21ASCII时间日期格式
+        /// </summary>
+        /// <param name="xts">XTSBLOCK(XTSBLOCK),引用传递ref,要被格式化的时间戳</param>
+        /// <param name="ptbuff">character array(byte[]),引用传递out,格式化后的时间戳</param>
+        /// <param name="sizebuff">short word(short),值传递，指定ptbuff的字符个数。有效大小为15,18,20.任何其它大小都被设置为1</param>
+        /// <param name="error">byte(byte),引用传递out,没错则为0，反之则为1</param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void XTS2ASCII(ref XTSBLOCK xts, out byte[] ptbuff, short sizebuff, out byte error);
+
+        /// <summary>
+        /// 将一个AspenInfoPlus.21扩展时间戳转换为当前的天与时间。这个方法自动解决转换中出现的偏差
+        /// </summary>
+        /// <param name="xts">XTSBLOCK(XTSBLOCK),引用传递ref,要</param>
+        /// <param name="dspdate"></param>
+        /// <param name="dsptime"></param>
+        [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void XTS2DSPDT(ref XTSBLOCK xts, out int dspdate, out int dsptime);
         #endregion
 
         ////读统计值
