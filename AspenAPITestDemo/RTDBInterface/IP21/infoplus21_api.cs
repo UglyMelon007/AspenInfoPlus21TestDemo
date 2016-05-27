@@ -1089,9 +1089,9 @@ namespace RTDB.IP21
         /// <summary>
         /// 将一个AspenInfoPlus.21扩展时间戳转换为当前的天与时间。这个方法自动解决转换中出现的偏差
         /// </summary>
-        /// <param name="xts">XTSBLOCK(XTSBLOCK),引用传递ref,要</param>
-        /// <param name="dspdate"></param>
-        /// <param name="dsptime"></param>
+        /// <param name="xts">XTSBLOCK(XTSBLOCK),引用传递ref,要被转换的外部时间戳</param>
+        /// <param name="dspdate">long word(int),引用传递out,返回指定时间所在当前世纪第几天</param>
+        /// <param name="dsptime">long word(int),引用传递out,返回在第几天的的第几秒（精确到0.1)</param>
         [DllImport("infoplus21_api.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern void XTS2DSPDT(ref XTSBLOCK xts, out int dspdate, out int dsptime);
         #endregion
